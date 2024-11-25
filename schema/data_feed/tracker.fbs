@@ -48,6 +48,13 @@ table TrackerData {
 
     /// Data ticks per second, processed by SlimeVR server
     tps: uint16 = null;
+
+    /// Amount of yaw correction that was applied by Spine Yaw Correction
+    yaw_correction_in_deg: float;
+
+    /// Angle between the tracker's YZ plane and its parent tracker's YZ plane. Spine Yaw Correction aims to keep
+    /// trackers aligned by minimizing this angle.
+    angle_from_parent_tracker_in_deg: float;
 }
 
 /// A mask of the different components in `TrackerComponent`
@@ -63,6 +70,8 @@ table TrackerDataMask {
     rotation_reference_adjusted: bool;
     rotation_identity_adjusted: bool;
     tps: bool;
+    yaw_correction_in_deg: bool;
+    angle_from_parent_tracker_in_deg: bool;
 }
 
 /// Static description of a tracker
@@ -102,7 +111,7 @@ table TrackerInfo {
     is_hmd: bool;
 
     magnetometer: solarxr_protocol.datatypes.MagnetometerStatus;
-    
+
     /// Indicates what type of data the tracker sends (note: it always ends up being rotation in the end)
     data_support: solarxr_protocol.datatypes.hardware_info.TrackerDataType;
 }

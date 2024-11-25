@@ -3232,7 +3232,9 @@ struct TrackerData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_LINEAR_ACCELERATION = 20,
     VT_ROTATION_REFERENCE_ADJUSTED = 22,
     VT_ROTATION_IDENTITY_ADJUSTED = 24,
-    VT_TPS = 26
+    VT_TPS = 26,
+    VT_YAW_CORRECTION_IN_DEG = 28,
+    VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG = 30
   };
   const solarxr_protocol::datatypes::TrackerId *tracker_id() const {
     return GetPointer<const solarxr_protocol::datatypes::TrackerId *>(VT_TRACKER_ID);
@@ -3289,6 +3291,15 @@ struct TrackerData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   flatbuffers::Optional<uint16_t> tps() const {
     return GetOptional<uint16_t, uint16_t>(VT_TPS);
   }
+  /// Amount of yaw correction that was applied by Spine Yaw Correction
+  float yaw_correction_in_deg() const {
+    return GetField<float>(VT_YAW_CORRECTION_IN_DEG, 0.0f);
+  }
+  /// Angle between the tracker's YZ plane and its parent tracker's YZ plane. Spine Yaw Correction aims to keep
+  /// trackers aligned by minimizing this angle.
+  float angle_from_parent_tracker_in_deg() const {
+    return GetField<float>(VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, 0.0f);
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_TRACKER_ID) &&
@@ -3305,6 +3316,8 @@ struct TrackerData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<solarxr_protocol::datatypes::math::Quat>(verifier, VT_ROTATION_REFERENCE_ADJUSTED, 4) &&
            VerifyField<solarxr_protocol::datatypes::math::Quat>(verifier, VT_ROTATION_IDENTITY_ADJUSTED, 4) &&
            VerifyField<uint16_t>(verifier, VT_TPS, 2) &&
+           VerifyField<float>(verifier, VT_YAW_CORRECTION_IN_DEG, 4) &&
+           VerifyField<float>(verifier, VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, 4) &&
            verifier.EndTable();
   }
 };
@@ -3349,6 +3362,12 @@ struct TrackerDataBuilder {
   void add_tps(uint16_t tps) {
     fbb_.AddElement<uint16_t>(TrackerData::VT_TPS, tps);
   }
+  void add_yaw_correction_in_deg(float yaw_correction_in_deg) {
+    fbb_.AddElement<float>(TrackerData::VT_YAW_CORRECTION_IN_DEG, yaw_correction_in_deg, 0.0f);
+  }
+  void add_angle_from_parent_tracker_in_deg(float angle_from_parent_tracker_in_deg) {
+    fbb_.AddElement<float>(TrackerData::VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, angle_from_parent_tracker_in_deg, 0.0f);
+  }
   explicit TrackerDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -3373,8 +3392,12 @@ inline flatbuffers::Offset<TrackerData> CreateTrackerData(
     const solarxr_protocol::datatypes::math::Vec3f *linear_acceleration = nullptr,
     const solarxr_protocol::datatypes::math::Quat *rotation_reference_adjusted = nullptr,
     const solarxr_protocol::datatypes::math::Quat *rotation_identity_adjusted = nullptr,
-    flatbuffers::Optional<uint16_t> tps = flatbuffers::nullopt) {
+    flatbuffers::Optional<uint16_t> tps = flatbuffers::nullopt,
+    float yaw_correction_in_deg = 0.0f,
+    float angle_from_parent_tracker_in_deg = 0.0f) {
   TrackerDataBuilder builder_(_fbb);
+  builder_.add_angle_from_parent_tracker_in_deg(angle_from_parent_tracker_in_deg);
+  builder_.add_yaw_correction_in_deg(yaw_correction_in_deg);
   builder_.add_rotation_identity_adjusted(rotation_identity_adjusted);
   builder_.add_rotation_reference_adjusted(rotation_reference_adjusted);
   builder_.add_linear_acceleration(linear_acceleration);
@@ -3404,7 +3427,9 @@ struct TrackerDataMask FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_LINEAR_ACCELERATION = 18,
     VT_ROTATION_REFERENCE_ADJUSTED = 20,
     VT_ROTATION_IDENTITY_ADJUSTED = 22,
-    VT_TPS = 24
+    VT_TPS = 24,
+    VT_YAW_CORRECTION_IN_DEG = 26,
+    VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG = 28
   };
   bool info() const {
     return GetField<uint8_t>(VT_INFO, 0) != 0;
@@ -3439,6 +3464,12 @@ struct TrackerDataMask FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool tps() const {
     return GetField<uint8_t>(VT_TPS, 0) != 0;
   }
+  bool yaw_correction_in_deg() const {
+    return GetField<uint8_t>(VT_YAW_CORRECTION_IN_DEG, 0) != 0;
+  }
+  bool angle_from_parent_tracker_in_deg() const {
+    return GetField<uint8_t>(VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, 0) != 0;
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_INFO, 1) &&
@@ -3452,6 +3483,8 @@ struct TrackerDataMask FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<uint8_t>(verifier, VT_ROTATION_REFERENCE_ADJUSTED, 1) &&
            VerifyField<uint8_t>(verifier, VT_ROTATION_IDENTITY_ADJUSTED, 1) &&
            VerifyField<uint8_t>(verifier, VT_TPS, 1) &&
+           VerifyField<uint8_t>(verifier, VT_YAW_CORRECTION_IN_DEG, 1) &&
+           VerifyField<uint8_t>(verifier, VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, 1) &&
            verifier.EndTable();
   }
 };
@@ -3493,6 +3526,12 @@ struct TrackerDataMaskBuilder {
   void add_tps(bool tps) {
     fbb_.AddElement<uint8_t>(TrackerDataMask::VT_TPS, static_cast<uint8_t>(tps), 0);
   }
+  void add_yaw_correction_in_deg(bool yaw_correction_in_deg) {
+    fbb_.AddElement<uint8_t>(TrackerDataMask::VT_YAW_CORRECTION_IN_DEG, static_cast<uint8_t>(yaw_correction_in_deg), 0);
+  }
+  void add_angle_from_parent_tracker_in_deg(bool angle_from_parent_tracker_in_deg) {
+    fbb_.AddElement<uint8_t>(TrackerDataMask::VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, static_cast<uint8_t>(angle_from_parent_tracker_in_deg), 0);
+  }
   explicit TrackerDataMaskBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -3516,8 +3555,12 @@ inline flatbuffers::Offset<TrackerDataMask> CreateTrackerDataMask(
     bool linear_acceleration = false,
     bool rotation_reference_adjusted = false,
     bool rotation_identity_adjusted = false,
-    bool tps = false) {
+    bool tps = false,
+    bool yaw_correction_in_deg = false,
+    bool angle_from_parent_tracker_in_deg = false) {
   TrackerDataMaskBuilder builder_(_fbb);
+  builder_.add_angle_from_parent_tracker_in_deg(angle_from_parent_tracker_in_deg);
+  builder_.add_yaw_correction_in_deg(yaw_correction_in_deg);
   builder_.add_tps(tps);
   builder_.add_rotation_identity_adjusted(rotation_identity_adjusted);
   builder_.add_rotation_reference_adjusted(rotation_reference_adjusted);
@@ -6721,7 +6764,9 @@ struct YawCorrectionSettings FLATBUFFERS_FINAL_CLASS : private flatbuffers::Tabl
   typedef YawCorrectionSettingsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_ENABLED = 4,
-    VT_AMOUNTINDEGPERSEC = 6
+    VT_AMOUNTINDEGPERSEC = 6,
+    VT_ALIGNLEGTRACKERS = 8,
+    VT_ALIGNLEGTRACKERSTOUPPERBODY = 10
   };
   bool enabled() const {
     return GetField<uint8_t>(VT_ENABLED, 0) != 0;
@@ -6729,10 +6774,18 @@ struct YawCorrectionSettings FLATBUFFERS_FINAL_CLASS : private flatbuffers::Tabl
   float amountInDegPerSec() const {
     return GetField<float>(VT_AMOUNTINDEGPERSEC, 0.0f);
   }
+  bool alignLegTrackers() const {
+    return GetField<uint8_t>(VT_ALIGNLEGTRACKERS, 0) != 0;
+  }
+  bool alignLegTrackersToUpperBody() const {
+    return GetField<uint8_t>(VT_ALIGNLEGTRACKERSTOUPPERBODY, 0) != 0;
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_ENABLED, 1) &&
            VerifyField<float>(verifier, VT_AMOUNTINDEGPERSEC, 4) &&
+           VerifyField<uint8_t>(verifier, VT_ALIGNLEGTRACKERS, 1) &&
+           VerifyField<uint8_t>(verifier, VT_ALIGNLEGTRACKERSTOUPPERBODY, 1) &&
            verifier.EndTable();
   }
 };
@@ -6746,6 +6799,12 @@ struct YawCorrectionSettingsBuilder {
   }
   void add_amountInDegPerSec(float amountInDegPerSec) {
     fbb_.AddElement<float>(YawCorrectionSettings::VT_AMOUNTINDEGPERSEC, amountInDegPerSec, 0.0f);
+  }
+  void add_alignLegTrackers(bool alignLegTrackers) {
+    fbb_.AddElement<uint8_t>(YawCorrectionSettings::VT_ALIGNLEGTRACKERS, static_cast<uint8_t>(alignLegTrackers), 0);
+  }
+  void add_alignLegTrackersToUpperBody(bool alignLegTrackersToUpperBody) {
+    fbb_.AddElement<uint8_t>(YawCorrectionSettings::VT_ALIGNLEGTRACKERSTOUPPERBODY, static_cast<uint8_t>(alignLegTrackersToUpperBody), 0);
   }
   explicit YawCorrectionSettingsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -6761,9 +6820,13 @@ struct YawCorrectionSettingsBuilder {
 inline flatbuffers::Offset<YawCorrectionSettings> CreateYawCorrectionSettings(
     flatbuffers::FlatBufferBuilder &_fbb,
     bool enabled = false,
-    float amountInDegPerSec = 0.0f) {
+    float amountInDegPerSec = 0.0f,
+    bool alignLegTrackers = false,
+    bool alignLegTrackersToUpperBody = false) {
   YawCorrectionSettingsBuilder builder_(_fbb);
   builder_.add_amountInDegPerSec(amountInDegPerSec);
+  builder_.add_alignLegTrackersToUpperBody(alignLegTrackersToUpperBody);
+  builder_.add_alignLegTrackers(alignLegTrackers);
   builder_.add_enabled(enabled);
   return builder_.Finish();
 }

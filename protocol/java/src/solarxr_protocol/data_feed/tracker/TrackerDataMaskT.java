@@ -19,6 +19,8 @@ public class TrackerDataMaskT {
   private boolean rotationReferenceAdjusted;
   private boolean rotationIdentityAdjusted;
   private boolean tps;
+  private boolean yawCorrectionInDeg;
+  private boolean angleFromParentTrackerInDeg;
 
   public boolean getInfo() { return info; }
 
@@ -64,6 +66,14 @@ public class TrackerDataMaskT {
 
   public void setTps(boolean tps) { this.tps = tps; }
 
+  public boolean getYawCorrectionInDeg() { return yawCorrectionInDeg; }
+
+  public void setYawCorrectionInDeg(boolean yawCorrectionInDeg) { this.yawCorrectionInDeg = yawCorrectionInDeg; }
+
+  public boolean getAngleFromParentTrackerInDeg() { return angleFromParentTrackerInDeg; }
+
+  public void setAngleFromParentTrackerInDeg(boolean angleFromParentTrackerInDeg) { this.angleFromParentTrackerInDeg = angleFromParentTrackerInDeg; }
+
 
   public TrackerDataMaskT() {
     this.info = false;
@@ -77,6 +87,8 @@ public class TrackerDataMaskT {
     this.rotationReferenceAdjusted = false;
     this.rotationIdentityAdjusted = false;
     this.tps = false;
+    this.yawCorrectionInDeg = false;
+    this.angleFromParentTrackerInDeg = false;
   }
 }
 

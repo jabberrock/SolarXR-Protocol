@@ -42,6 +42,8 @@ impl<'a> TrackerData<'a> {
   pub const VT_ROTATION_REFERENCE_ADJUSTED: flatbuffers::VOffsetT = 22;
   pub const VT_ROTATION_IDENTITY_ADJUSTED: flatbuffers::VOffsetT = 24;
   pub const VT_TPS: flatbuffers::VOffsetT = 26;
+  pub const VT_YAW_CORRECTION_IN_DEG: flatbuffers::VOffsetT = 28;
+  pub const VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG: flatbuffers::VOffsetT = 30;
 
   #[inline]
   pub unsafe fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
@@ -53,6 +55,8 @@ impl<'a> TrackerData<'a> {
     args: &'args TrackerDataArgs<'args>
   ) -> flatbuffers::WIPOffset<TrackerData<'bldr>> {
     let mut builder = TrackerDataBuilder::new(_fbb);
+    builder.add_angle_from_parent_tracker_in_deg(args.angle_from_parent_tracker_in_deg);
+    builder.add_yaw_correction_in_deg(args.yaw_correction_in_deg);
     if let Some(x) = args.rotation_identity_adjusted { builder.add_rotation_identity_adjusted(x); }
     if let Some(x) = args.rotation_reference_adjusted { builder.add_rotation_reference_adjusted(x); }
     if let Some(x) = args.linear_acceleration { builder.add_linear_acceleration(x); }
@@ -172,6 +176,23 @@ impl<'a> TrackerData<'a> {
     // which contains a valid value in this slot
     unsafe { self._tab.get::<u16>(TrackerData::VT_TPS, None)}
   }
+  /// Amount of yaw correction that was applied by Spine Yaw Correction
+  #[inline]
+  pub fn yaw_correction_in_deg(&self) -> f32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<f32>(TrackerData::VT_YAW_CORRECTION_IN_DEG, Some(0.0)).unwrap()}
+  }
+  /// Angle between the tracker's YZ plane and its parent tracker's YZ plane. Spine Yaw Correction aims to keep
+  /// trackers aligned by minimizing this angle.
+  #[inline]
+  pub fn angle_from_parent_tracker_in_deg(&self) -> f32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<f32>(TrackerData::VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, Some(0.0)).unwrap()}
+  }
 }
 
 impl flatbuffers::Verifiable for TrackerData<'_> {
@@ -193,6 +214,8 @@ impl flatbuffers::Verifiable for TrackerData<'_> {
      .visit_field::<super::super::datatypes::math::Quat>("rotation_reference_adjusted", Self::VT_ROTATION_REFERENCE_ADJUSTED, false)?
      .visit_field::<super::super::datatypes::math::Quat>("rotation_identity_adjusted", Self::VT_ROTATION_IDENTITY_ADJUSTED, false)?
      .visit_field::<u16>("tps", Self::VT_TPS, false)?
+     .visit_field::<f32>("yaw_correction_in_deg", Self::VT_YAW_CORRECTION_IN_DEG, false)?
+     .visit_field::<f32>("angle_from_parent_tracker_in_deg", Self::VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, false)?
      .finish();
     Ok(())
   }
@@ -210,6 +233,8 @@ pub struct TrackerDataArgs<'a> {
     pub rotation_reference_adjusted: Option<&'a super::super::datatypes::math::Quat>,
     pub rotation_identity_adjusted: Option<&'a super::super::datatypes::math::Quat>,
     pub tps: Option<u16>,
+    pub yaw_correction_in_deg: f32,
+    pub angle_from_parent_tracker_in_deg: f32,
 }
 impl<'a> Default for TrackerDataArgs<'a> {
   #[inline]
@@ -227,6 +252,8 @@ impl<'a> Default for TrackerDataArgs<'a> {
       rotation_reference_adjusted: None,
       rotation_identity_adjusted: None,
       tps: None,
+      yaw_correction_in_deg: 0.0,
+      angle_from_parent_tracker_in_deg: 0.0,
     }
   }
 }
@@ -285,6 +312,14 @@ impl<'a: 'b, 'b> TrackerDataBuilder<'a, 'b> {
     self.fbb_.push_slot_always::<u16>(TrackerData::VT_TPS, tps);
   }
   #[inline]
+  pub fn add_yaw_correction_in_deg(&mut self, yaw_correction_in_deg: f32) {
+    self.fbb_.push_slot::<f32>(TrackerData::VT_YAW_CORRECTION_IN_DEG, yaw_correction_in_deg, 0.0);
+  }
+  #[inline]
+  pub fn add_angle_from_parent_tracker_in_deg(&mut self, angle_from_parent_tracker_in_deg: f32) {
+    self.fbb_.push_slot::<f32>(TrackerData::VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, angle_from_parent_tracker_in_deg, 0.0);
+  }
+  #[inline]
   pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> TrackerDataBuilder<'a, 'b> {
     let start = _fbb.start_table();
     TrackerDataBuilder {
@@ -314,6 +349,8 @@ impl core::fmt::Debug for TrackerData<'_> {
       ds.field("rotation_reference_adjusted", &self.rotation_reference_adjusted());
       ds.field("rotation_identity_adjusted", &self.rotation_identity_adjusted());
       ds.field("tps", &self.tps());
+      ds.field("yaw_correction_in_deg", &self.yaw_correction_in_deg());
+      ds.field("angle_from_parent_tracker_in_deg", &self.angle_from_parent_tracker_in_deg());
       ds.finish()
   }
 }

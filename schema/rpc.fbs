@@ -273,6 +273,8 @@ table ResetsSettings {
 table YawCorrectionSettings {
     enabled: bool;
     amountInDegPerSec: float32;
+    alignLegTrackers: bool;
+    alignLegTrackersToUpperBody: bool;
 }
 
 /// See TapDetectionSettings::setup_mode

@@ -37,6 +37,8 @@ impl<'a> TrackerDataMask<'a> {
   pub const VT_ROTATION_REFERENCE_ADJUSTED: flatbuffers::VOffsetT = 20;
   pub const VT_ROTATION_IDENTITY_ADJUSTED: flatbuffers::VOffsetT = 22;
   pub const VT_TPS: flatbuffers::VOffsetT = 24;
+  pub const VT_YAW_CORRECTION_IN_DEG: flatbuffers::VOffsetT = 26;
+  pub const VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG: flatbuffers::VOffsetT = 28;
 
   #[inline]
   pub unsafe fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
@@ -48,6 +50,8 @@ impl<'a> TrackerDataMask<'a> {
     args: &'args TrackerDataMaskArgs
   ) -> flatbuffers::WIPOffset<TrackerDataMask<'bldr>> {
     let mut builder = TrackerDataMaskBuilder::new(_fbb);
+    builder.add_angle_from_parent_tracker_in_deg(args.angle_from_parent_tracker_in_deg);
+    builder.add_yaw_correction_in_deg(args.yaw_correction_in_deg);
     builder.add_tps(args.tps);
     builder.add_rotation_identity_adjusted(args.rotation_identity_adjusted);
     builder.add_rotation_reference_adjusted(args.rotation_reference_adjusted);
@@ -140,6 +144,20 @@ impl<'a> TrackerDataMask<'a> {
     // which contains a valid value in this slot
     unsafe { self._tab.get::<bool>(TrackerDataMask::VT_TPS, Some(false)).unwrap()}
   }
+  #[inline]
+  pub fn yaw_correction_in_deg(&self) -> bool {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<bool>(TrackerDataMask::VT_YAW_CORRECTION_IN_DEG, Some(false)).unwrap()}
+  }
+  #[inline]
+  pub fn angle_from_parent_tracker_in_deg(&self) -> bool {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<bool>(TrackerDataMask::VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, Some(false)).unwrap()}
+  }
 }
 
 impl flatbuffers::Verifiable for TrackerDataMask<'_> {
@@ -160,6 +178,8 @@ impl flatbuffers::Verifiable for TrackerDataMask<'_> {
      .visit_field::<bool>("rotation_reference_adjusted", Self::VT_ROTATION_REFERENCE_ADJUSTED, false)?
      .visit_field::<bool>("rotation_identity_adjusted", Self::VT_ROTATION_IDENTITY_ADJUSTED, false)?
      .visit_field::<bool>("tps", Self::VT_TPS, false)?
+     .visit_field::<bool>("yaw_correction_in_deg", Self::VT_YAW_CORRECTION_IN_DEG, false)?
+     .visit_field::<bool>("angle_from_parent_tracker_in_deg", Self::VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, false)?
      .finish();
     Ok(())
   }
@@ -176,6 +196,8 @@ pub struct TrackerDataMaskArgs {
     pub rotation_reference_adjusted: bool,
     pub rotation_identity_adjusted: bool,
     pub tps: bool,
+    pub yaw_correction_in_deg: bool,
+    pub angle_from_parent_tracker_in_deg: bool,
 }
 impl<'a> Default for TrackerDataMaskArgs {
   #[inline]
@@ -192,6 +214,8 @@ impl<'a> Default for TrackerDataMaskArgs {
       rotation_reference_adjusted: false,
       rotation_identity_adjusted: false,
       tps: false,
+      yaw_correction_in_deg: false,
+      angle_from_parent_tracker_in_deg: false,
     }
   }
 }
@@ -246,6 +270,14 @@ impl<'a: 'b, 'b> TrackerDataMaskBuilder<'a, 'b> {
     self.fbb_.push_slot::<bool>(TrackerDataMask::VT_TPS, tps, false);
   }
   #[inline]
+  pub fn add_yaw_correction_in_deg(&mut self, yaw_correction_in_deg: bool) {
+    self.fbb_.push_slot::<bool>(TrackerDataMask::VT_YAW_CORRECTION_IN_DEG, yaw_correction_in_deg, false);
+  }
+  #[inline]
+  pub fn add_angle_from_parent_tracker_in_deg(&mut self, angle_from_parent_tracker_in_deg: bool) {
+    self.fbb_.push_slot::<bool>(TrackerDataMask::VT_ANGLE_FROM_PARENT_TRACKER_IN_DEG, angle_from_parent_tracker_in_deg, false);
+  }
+  #[inline]
   pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> TrackerDataMaskBuilder<'a, 'b> {
     let start = _fbb.start_table();
     TrackerDataMaskBuilder {
@@ -274,6 +306,8 @@ impl core::fmt::Debug for TrackerDataMask<'_> {
       ds.field("rotation_reference_adjusted", &self.rotation_reference_adjusted());
       ds.field("rotation_identity_adjusted", &self.rotation_identity_adjusted());
       ds.field("tps", &self.tps());
+      ds.field("yaw_correction_in_deg", &self.yaw_correction_in_deg());
+      ds.field("angle_from_parent_tracker_in_deg", &self.angle_from_parent_tracker_in_deg());
       ds.finish()
   }
 }

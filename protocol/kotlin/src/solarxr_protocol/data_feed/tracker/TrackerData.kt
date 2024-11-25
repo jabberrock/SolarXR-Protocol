@@ -160,6 +160,23 @@ class TrackerData : Table() {
             val o = __offset(26)
             return if(o != 0) bb.getShort(o + bb_pos).toUShort() else null
         }
+    /**
+     * Amount of yaw correction that was applied by Spine Yaw Correction
+     */
+    val yawCorrectionInDeg : Float
+        get() {
+            val o = __offset(28)
+            return if(o != 0) bb.getFloat(o + bb_pos) else 0.0f
+        }
+    /**
+     * Angle between the tracker's YZ plane and its parent tracker's YZ plane. Spine Yaw Correction aims to keep
+     * trackers aligned by minimizing this angle.
+     */
+    val angleFromParentTrackerInDeg : Float
+        get() {
+            val o = __offset(30)
+            return if(o != 0) bb.getFloat(o + bb_pos) else 0.0f
+        }
     companion object {
         @JvmStatic
         fun validateVersion() = Constants.FLATBUFFERS_22_10_26()
@@ -171,7 +188,7 @@ class TrackerData : Table() {
             return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb))
         }
         @JvmStatic
-        fun startTrackerData(builder: FlatBufferBuilder) = builder.startTable(12)
+        fun startTrackerData(builder: FlatBufferBuilder) = builder.startTable(14)
         @JvmStatic
         fun addTrackerId(builder: FlatBufferBuilder, trackerId: Int) = builder.addOffset(0, trackerId, 0)
         @JvmStatic
@@ -196,6 +213,10 @@ class TrackerData : Table() {
         fun addRotationIdentityAdjusted(builder: FlatBufferBuilder, rotationIdentityAdjusted: Int) = builder.addStruct(10, rotationIdentityAdjusted, 0)
         @JvmStatic
         fun addTps(builder: FlatBufferBuilder, tps: UShort) = builder.addShort(11, tps.toShort(), 0)
+        @JvmStatic
+        fun addYawCorrectionInDeg(builder: FlatBufferBuilder, yawCorrectionInDeg: Float) = builder.addFloat(12, yawCorrectionInDeg, 0.0)
+        @JvmStatic
+        fun addAngleFromParentTrackerInDeg(builder: FlatBufferBuilder, angleFromParentTrackerInDeg: Float) = builder.addFloat(13, angleFromParentTrackerInDeg, 0.0)
         @JvmStatic
         fun endTrackerData(builder: FlatBufferBuilder) : Int {
             val o = builder.endTable()

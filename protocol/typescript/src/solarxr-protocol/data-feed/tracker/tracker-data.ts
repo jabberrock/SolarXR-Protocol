@@ -132,8 +132,25 @@ tps():number|null {
   return offset ? this.bb!.readUint16(this.bb_pos + offset) : null;
 }
 
+/**
+ * Amount of yaw correction that was applied by Spine Yaw Correction
+ */
+yawCorrectionInDeg():number {
+  const offset = this.bb!.__offset(this.bb_pos, 28);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+/**
+ * Angle between the tracker's YZ plane and its parent tracker's YZ plane. Spine Yaw Correction aims to keep
+ * trackers aligned by minimizing this angle.
+ */
+angleFromParentTrackerInDeg():number {
+  const offset = this.bb!.__offset(this.bb_pos, 30);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
 static startTrackerData(builder:flatbuffers.Builder) {
-  builder.startObject(12);
+  builder.startObject(14);
 }
 
 static addTrackerId(builder:flatbuffers.Builder, trackerIdOffset:flatbuffers.Offset) {
@@ -184,6 +201,14 @@ static addTps(builder:flatbuffers.Builder, tps:number) {
   builder.addFieldInt16(11, tps, 0);
 }
 
+static addYawCorrectionInDeg(builder:flatbuffers.Builder, yawCorrectionInDeg:number) {
+  builder.addFieldFloat32(12, yawCorrectionInDeg, 0.0);
+}
+
+static addAngleFromParentTrackerInDeg(builder:flatbuffers.Builder, angleFromParentTrackerInDeg:number) {
+  builder.addFieldFloat32(13, angleFromParentTrackerInDeg, 0.0);
+}
+
 static endTrackerData(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
@@ -203,7 +228,9 @@ unpack(): TrackerDataT {
     (this.linearAcceleration() !== null ? this.linearAcceleration()!.unpack() : null),
     (this.rotationReferenceAdjusted() !== null ? this.rotationReferenceAdjusted()!.unpack() : null),
     (this.rotationIdentityAdjusted() !== null ? this.rotationIdentityAdjusted()!.unpack() : null),
-    this.tps()
+    this.tps(),
+    this.yawCorrectionInDeg(),
+    this.angleFromParentTrackerInDeg()
   );
 }
 
@@ -221,6 +248,8 @@ unpackTo(_o: TrackerDataT): void {
   _o.rotationReferenceAdjusted = (this.rotationReferenceAdjusted() !== null ? this.rotationReferenceAdjusted()!.unpack() : null);
   _o.rotationIdentityAdjusted = (this.rotationIdentityAdjusted() !== null ? this.rotationIdentityAdjusted()!.unpack() : null);
   _o.tps = this.tps();
+  _o.yawCorrectionInDeg = this.yawCorrectionInDeg();
+  _o.angleFromParentTrackerInDeg = this.angleFromParentTrackerInDeg();
 }
 }
 
@@ -237,7 +266,9 @@ constructor(
   public linearAcceleration: Vec3fT|null = null,
   public rotationReferenceAdjusted: QuatT|null = null,
   public rotationIdentityAdjusted: QuatT|null = null,
-  public tps: number|null = null
+  public tps: number|null = null,
+  public yawCorrectionInDeg: number = 0.0,
+  public angleFromParentTrackerInDeg: number = 0.0
 ){}
 
 
@@ -259,6 +290,8 @@ pack(builder:flatbuffers.Builder): flatbuffers.Offset {
   TrackerData.addRotationIdentityAdjusted(builder, (this.rotationIdentityAdjusted !== null ? this.rotationIdentityAdjusted!.pack(builder) : 0));
   if (this.tps !== null)
     TrackerData.addTps(builder, this.tps);
+  TrackerData.addYawCorrectionInDeg(builder, this.yawCorrectionInDeg);
+  TrackerData.addAngleFromParentTrackerInDeg(builder, this.angleFromParentTrackerInDeg);
 
   return TrackerData.endTrackerData(builder);
 }
