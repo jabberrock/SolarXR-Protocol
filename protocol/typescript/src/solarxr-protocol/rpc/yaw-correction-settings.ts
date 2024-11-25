@@ -32,8 +32,18 @@ amountInDegPerSec():number {
   return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
 }
 
+alignLegTrackers():boolean {
+  const offset = this.bb!.__offset(this.bb_pos, 8);
+  return offset ? !!this.bb!.readInt8(this.bb_pos + offset) : false;
+}
+
+alignLegTrackersToUpperBody():boolean {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? !!this.bb!.readInt8(this.bb_pos + offset) : false;
+}
+
 static startYawCorrectionSettings(builder:flatbuffers.Builder) {
-  builder.startObject(2);
+  builder.startObject(4);
 }
 
 static addEnabled(builder:flatbuffers.Builder, enabled:boolean) {
@@ -44,22 +54,34 @@ static addAmountInDegPerSec(builder:flatbuffers.Builder, amountInDegPerSec:numbe
   builder.addFieldFloat32(1, amountInDegPerSec, 0.0);
 }
 
+static addAlignLegTrackers(builder:flatbuffers.Builder, alignLegTrackers:boolean) {
+  builder.addFieldInt8(2, +alignLegTrackers, +false);
+}
+
+static addAlignLegTrackersToUpperBody(builder:flatbuffers.Builder, alignLegTrackersToUpperBody:boolean) {
+  builder.addFieldInt8(3, +alignLegTrackersToUpperBody, +false);
+}
+
 static endYawCorrectionSettings(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createYawCorrectionSettings(builder:flatbuffers.Builder, enabled:boolean, amountInDegPerSec:number):flatbuffers.Offset {
+static createYawCorrectionSettings(builder:flatbuffers.Builder, enabled:boolean, amountInDegPerSec:number, alignLegTrackers:boolean, alignLegTrackersToUpperBody:boolean):flatbuffers.Offset {
   YawCorrectionSettings.startYawCorrectionSettings(builder);
   YawCorrectionSettings.addEnabled(builder, enabled);
   YawCorrectionSettings.addAmountInDegPerSec(builder, amountInDegPerSec);
+  YawCorrectionSettings.addAlignLegTrackers(builder, alignLegTrackers);
+  YawCorrectionSettings.addAlignLegTrackersToUpperBody(builder, alignLegTrackersToUpperBody);
   return YawCorrectionSettings.endYawCorrectionSettings(builder);
 }
 
 unpack(): YawCorrectionSettingsT {
   return new YawCorrectionSettingsT(
     this.enabled(),
-    this.amountInDegPerSec()
+    this.amountInDegPerSec(),
+    this.alignLegTrackers(),
+    this.alignLegTrackersToUpperBody()
   );
 }
 
@@ -67,20 +89,26 @@ unpack(): YawCorrectionSettingsT {
 unpackTo(_o: YawCorrectionSettingsT): void {
   _o.enabled = this.enabled();
   _o.amountInDegPerSec = this.amountInDegPerSec();
+  _o.alignLegTrackers = this.alignLegTrackers();
+  _o.alignLegTrackersToUpperBody = this.alignLegTrackersToUpperBody();
 }
 }
 
 export class YawCorrectionSettingsT implements flatbuffers.IGeneratedObject {
 constructor(
   public enabled: boolean = false,
-  public amountInDegPerSec: number = 0.0
+  public amountInDegPerSec: number = 0.0,
+  public alignLegTrackers: boolean = false,
+  public alignLegTrackersToUpperBody: boolean = false
 ){}
 
 
 pack(builder:flatbuffers.Builder): flatbuffers.Offset {
   return YawCorrectionSettings.createYawCorrectionSettings(builder,
     this.enabled,
-    this.amountInDegPerSec
+    this.amountInDegPerSec,
+    this.alignLegTrackers,
+    this.alignLegTrackersToUpperBody
   );
 }
 }

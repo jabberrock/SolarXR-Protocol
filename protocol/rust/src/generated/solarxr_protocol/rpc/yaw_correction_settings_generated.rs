@@ -27,6 +27,8 @@ impl<'a> flatbuffers::Follow<'a> for YawCorrectionSettings<'a> {
 impl<'a> YawCorrectionSettings<'a> {
   pub const VT_ENABLED: flatbuffers::VOffsetT = 4;
   pub const VT_AMOUNTINDEGPERSEC: flatbuffers::VOffsetT = 6;
+  pub const VT_ALIGNLEGTRACKERS: flatbuffers::VOffsetT = 8;
+  pub const VT_ALIGNLEGTRACKERSTOUPPERBODY: flatbuffers::VOffsetT = 10;
 
   #[inline]
   pub unsafe fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
@@ -39,6 +41,8 @@ impl<'a> YawCorrectionSettings<'a> {
   ) -> flatbuffers::WIPOffset<YawCorrectionSettings<'bldr>> {
     let mut builder = YawCorrectionSettingsBuilder::new(_fbb);
     builder.add_amountInDegPerSec(args.amountInDegPerSec);
+    builder.add_alignLegTrackersToUpperBody(args.alignLegTrackersToUpperBody);
+    builder.add_alignLegTrackers(args.alignLegTrackers);
     builder.add_enabled(args.enabled);
     builder.finish()
   }
@@ -58,6 +62,20 @@ impl<'a> YawCorrectionSettings<'a> {
     // which contains a valid value in this slot
     unsafe { self._tab.get::<f32>(YawCorrectionSettings::VT_AMOUNTINDEGPERSEC, Some(0.0)).unwrap()}
   }
+  #[inline]
+  pub fn alignLegTrackers(&self) -> bool {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<bool>(YawCorrectionSettings::VT_ALIGNLEGTRACKERS, Some(false)).unwrap()}
+  }
+  #[inline]
+  pub fn alignLegTrackersToUpperBody(&self) -> bool {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<bool>(YawCorrectionSettings::VT_ALIGNLEGTRACKERSTOUPPERBODY, Some(false)).unwrap()}
+  }
 }
 
 impl flatbuffers::Verifiable for YawCorrectionSettings<'_> {
@@ -69,6 +87,8 @@ impl flatbuffers::Verifiable for YawCorrectionSettings<'_> {
     v.visit_table(pos)?
      .visit_field::<bool>("enabled", Self::VT_ENABLED, false)?
      .visit_field::<f32>("amountInDegPerSec", Self::VT_AMOUNTINDEGPERSEC, false)?
+     .visit_field::<bool>("alignLegTrackers", Self::VT_ALIGNLEGTRACKERS, false)?
+     .visit_field::<bool>("alignLegTrackersToUpperBody", Self::VT_ALIGNLEGTRACKERSTOUPPERBODY, false)?
      .finish();
     Ok(())
   }
@@ -76,6 +96,8 @@ impl flatbuffers::Verifiable for YawCorrectionSettings<'_> {
 pub struct YawCorrectionSettingsArgs {
     pub enabled: bool,
     pub amountInDegPerSec: f32,
+    pub alignLegTrackers: bool,
+    pub alignLegTrackersToUpperBody: bool,
 }
 impl<'a> Default for YawCorrectionSettingsArgs {
   #[inline]
@@ -83,6 +105,8 @@ impl<'a> Default for YawCorrectionSettingsArgs {
     YawCorrectionSettingsArgs {
       enabled: false,
       amountInDegPerSec: 0.0,
+      alignLegTrackers: false,
+      alignLegTrackersToUpperBody: false,
     }
   }
 }
@@ -99,6 +123,14 @@ impl<'a: 'b, 'b> YawCorrectionSettingsBuilder<'a, 'b> {
   #[inline]
   pub fn add_amountInDegPerSec(&mut self, amountInDegPerSec: f32) {
     self.fbb_.push_slot::<f32>(YawCorrectionSettings::VT_AMOUNTINDEGPERSEC, amountInDegPerSec, 0.0);
+  }
+  #[inline]
+  pub fn add_alignLegTrackers(&mut self, alignLegTrackers: bool) {
+    self.fbb_.push_slot::<bool>(YawCorrectionSettings::VT_ALIGNLEGTRACKERS, alignLegTrackers, false);
+  }
+  #[inline]
+  pub fn add_alignLegTrackersToUpperBody(&mut self, alignLegTrackersToUpperBody: bool) {
+    self.fbb_.push_slot::<bool>(YawCorrectionSettings::VT_ALIGNLEGTRACKERSTOUPPERBODY, alignLegTrackersToUpperBody, false);
   }
   #[inline]
   pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> YawCorrectionSettingsBuilder<'a, 'b> {
@@ -120,6 +152,8 @@ impl core::fmt::Debug for YawCorrectionSettings<'_> {
     let mut ds = f.debug_struct("YawCorrectionSettings");
       ds.field("enabled", &self.enabled());
       ds.field("amountInDegPerSec", &self.amountInDegPerSec());
+      ds.field("alignLegTrackers", &self.alignLegTrackers());
+      ds.field("alignLegTrackersToUpperBody", &self.alignLegTrackersToUpperBody());
       ds.finish()
   }
 }

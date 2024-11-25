@@ -10,6 +10,8 @@ import com.google.flatbuffers.*;
 public class YawCorrectionSettingsT {
   private boolean enabled;
   private float amountInDegPerSec;
+  private boolean alignLegTrackers;
+  private boolean alignLegTrackersToUpperBody;
 
   public boolean getEnabled() { return enabled; }
 
@@ -19,10 +21,20 @@ public class YawCorrectionSettingsT {
 
   public void setAmountInDegPerSec(float amountInDegPerSec) { this.amountInDegPerSec = amountInDegPerSec; }
 
+  public boolean getAlignLegTrackers() { return alignLegTrackers; }
+
+  public void setAlignLegTrackers(boolean alignLegTrackers) { this.alignLegTrackers = alignLegTrackers; }
+
+  public boolean getAlignLegTrackersToUpperBody() { return alignLegTrackersToUpperBody; }
+
+  public void setAlignLegTrackersToUpperBody(boolean alignLegTrackersToUpperBody) { this.alignLegTrackersToUpperBody = alignLegTrackersToUpperBody; }
+
 
   public YawCorrectionSettingsT() {
     this.enabled = false;
     this.amountInDegPerSec = 0.0f;
+    this.alignLegTrackers = false;
+    this.alignLegTrackersToUpperBody = false;
   }
 }
 

@@ -26,6 +26,16 @@ class YawCorrectionSettings : Table() {
             val o = __offset(6)
             return if(o != 0) bb.getFloat(o + bb_pos) else 0.0f
         }
+    val alignLegTrackers : Boolean
+        get() {
+            val o = __offset(8)
+            return if(o != 0) 0.toByte() != bb.get(o + bb_pos) else false
+        }
+    val alignLegTrackersToUpperBody : Boolean
+        get() {
+            val o = __offset(10)
+            return if(o != 0) 0.toByte() != bb.get(o + bb_pos) else false
+        }
     companion object {
         @JvmStatic
         fun validateVersion() = Constants.FLATBUFFERS_22_10_26()
@@ -37,18 +47,24 @@ class YawCorrectionSettings : Table() {
             return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb))
         }
         @JvmStatic
-        fun createYawCorrectionSettings(builder: FlatBufferBuilder, enabled: Boolean, amountInDegPerSec: Float) : Int {
-            builder.startTable(2)
+        fun createYawCorrectionSettings(builder: FlatBufferBuilder, enabled: Boolean, amountInDegPerSec: Float, alignLegTrackers: Boolean, alignLegTrackersToUpperBody: Boolean) : Int {
+            builder.startTable(4)
             addAmountInDegPerSec(builder, amountInDegPerSec)
+            addAlignLegTrackersToUpperBody(builder, alignLegTrackersToUpperBody)
+            addAlignLegTrackers(builder, alignLegTrackers)
             addEnabled(builder, enabled)
             return endYawCorrectionSettings(builder)
         }
         @JvmStatic
-        fun startYawCorrectionSettings(builder: FlatBufferBuilder) = builder.startTable(2)
+        fun startYawCorrectionSettings(builder: FlatBufferBuilder) = builder.startTable(4)
         @JvmStatic
         fun addEnabled(builder: FlatBufferBuilder, enabled: Boolean) = builder.addBoolean(0, enabled, false)
         @JvmStatic
         fun addAmountInDegPerSec(builder: FlatBufferBuilder, amountInDegPerSec: Float) = builder.addFloat(1, amountInDegPerSec, 0.0)
+        @JvmStatic
+        fun addAlignLegTrackers(builder: FlatBufferBuilder, alignLegTrackers: Boolean) = builder.addBoolean(2, alignLegTrackers, false)
+        @JvmStatic
+        fun addAlignLegTrackersToUpperBody(builder: FlatBufferBuilder, alignLegTrackersToUpperBody: Boolean) = builder.addBoolean(3, alignLegTrackersToUpperBody, false)
         @JvmStatic
         fun endYawCorrectionSettings(builder: FlatBufferBuilder) : Int {
             val o = builder.endTable()

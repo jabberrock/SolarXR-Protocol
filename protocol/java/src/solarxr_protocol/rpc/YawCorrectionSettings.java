@@ -17,19 +17,27 @@ public final class YawCorrectionSettings extends Table {
 
   public boolean enabled() { int o = __offset(4); return o != 0 ? 0!=bb.get(o + bb_pos) : false; }
   public float amountInDegPerSec() { int o = __offset(6); return o != 0 ? bb.getFloat(o + bb_pos) : 0.0f; }
+  public boolean alignLegTrackers() { int o = __offset(8); return o != 0 ? 0!=bb.get(o + bb_pos) : false; }
+  public boolean alignLegTrackersToUpperBody() { int o = __offset(10); return o != 0 ? 0!=bb.get(o + bb_pos) : false; }
 
   public static int createYawCorrectionSettings(FlatBufferBuilder builder,
       boolean enabled,
-      float amountInDegPerSec) {
-    builder.startTable(2);
+      float amountInDegPerSec,
+      boolean alignLegTrackers,
+      boolean alignLegTrackersToUpperBody) {
+    builder.startTable(4);
     YawCorrectionSettings.addAmountInDegPerSec(builder, amountInDegPerSec);
+    YawCorrectionSettings.addAlignLegTrackersToUpperBody(builder, alignLegTrackersToUpperBody);
+    YawCorrectionSettings.addAlignLegTrackers(builder, alignLegTrackers);
     YawCorrectionSettings.addEnabled(builder, enabled);
     return YawCorrectionSettings.endYawCorrectionSettings(builder);
   }
 
-  public static void startYawCorrectionSettings(FlatBufferBuilder builder) { builder.startTable(2); }
+  public static void startYawCorrectionSettings(FlatBufferBuilder builder) { builder.startTable(4); }
   public static void addEnabled(FlatBufferBuilder builder, boolean enabled) { builder.addBoolean(0, enabled, false); }
   public static void addAmountInDegPerSec(FlatBufferBuilder builder, float amountInDegPerSec) { builder.addFloat(1, amountInDegPerSec, 0.0f); }
+  public static void addAlignLegTrackers(FlatBufferBuilder builder, boolean alignLegTrackers) { builder.addBoolean(2, alignLegTrackers, false); }
+  public static void addAlignLegTrackersToUpperBody(FlatBufferBuilder builder, boolean alignLegTrackersToUpperBody) { builder.addBoolean(3, alignLegTrackersToUpperBody, false); }
   public static int endYawCorrectionSettings(FlatBufferBuilder builder) {
     int o = builder.endTable();
     return o;
@@ -51,13 +59,19 @@ public final class YawCorrectionSettings extends Table {
     _o.setEnabled(_oEnabled);
     float _oAmountInDegPerSec = amountInDegPerSec();
     _o.setAmountInDegPerSec(_oAmountInDegPerSec);
+    boolean _oAlignLegTrackers = alignLegTrackers();
+    _o.setAlignLegTrackers(_oAlignLegTrackers);
+    boolean _oAlignLegTrackersToUpperBody = alignLegTrackersToUpperBody();
+    _o.setAlignLegTrackersToUpperBody(_oAlignLegTrackersToUpperBody);
   }
   public static int pack(FlatBufferBuilder builder, YawCorrectionSettingsT _o) {
     if (_o == null) return 0;
     return createYawCorrectionSettings(
       builder,
       _o.getEnabled(),
-      _o.getAmountInDegPerSec());
+      _o.getAmountInDegPerSec(),
+      _o.getAlignLegTrackers(),
+      _o.getAlignLegTrackersToUpperBody());
   }
 }
 
