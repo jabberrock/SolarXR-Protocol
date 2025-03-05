@@ -16,16 +16,32 @@ public final class ResetRequest extends Table {
   public ResetRequest __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public int resetType() { int o = __offset(4); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
+  public int trackerPositions(int j) { int o = __offset(6); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
+  public int trackerPositionsLength() { int o = __offset(6); return o != 0 ? __vector_len(o) : 0; }
+  public ByteVector trackerPositionsVector() { return trackerPositionsVector(new ByteVector()); }
+  public ByteVector trackerPositionsVector(ByteVector obj) { int o = __offset(6); return o != 0 ? obj.__assign(__vector(o), bb) : null; }
+  public ByteBuffer trackerPositionsAsByteBuffer() { return __vector_as_bytebuffer(6, 1); }
+  public ByteBuffer trackerPositionsInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 6, 1); }
+  public int referenceTrackerPosition() { int o = __offset(8); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
 
   public static int createResetRequest(FlatBufferBuilder builder,
-      int resetType) {
-    builder.startTable(1);
+      int resetType,
+      int trackerPositionsOffset,
+      int referenceTrackerPosition) {
+    builder.startTable(3);
+    ResetRequest.addTrackerPositions(builder, trackerPositionsOffset);
+    ResetRequest.addReferenceTrackerPosition(builder, referenceTrackerPosition);
     ResetRequest.addResetType(builder, resetType);
     return ResetRequest.endResetRequest(builder);
   }
 
-  public static void startResetRequest(FlatBufferBuilder builder) { builder.startTable(1); }
+  public static void startResetRequest(FlatBufferBuilder builder) { builder.startTable(3); }
   public static void addResetType(FlatBufferBuilder builder, int resetType) { builder.addByte(0, (byte) resetType, (byte) 0); }
+  public static void addTrackerPositions(FlatBufferBuilder builder, int trackerPositionsOffset) { builder.addOffset(1, trackerPositionsOffset, 0); }
+  public static int createTrackerPositionsVector(FlatBufferBuilder builder, byte[] data) { return builder.createByteVector(data); }
+  public static int createTrackerPositionsVector(FlatBufferBuilder builder, ByteBuffer data) { return builder.createByteVector(data); }
+  public static void startTrackerPositionsVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
+  public static void addReferenceTrackerPosition(FlatBufferBuilder builder, int referenceTrackerPosition) { builder.addByte(2, (byte) referenceTrackerPosition, (byte) 0); }
   public static int endResetRequest(FlatBufferBuilder builder) {
     int o = builder.endTable();
     return o;
@@ -45,12 +61,26 @@ public final class ResetRequest extends Table {
   public void unpackTo(ResetRequestT _o) {
     int _oResetType = resetType();
     _o.setResetType(_oResetType);
+    int[] _oTrackerPositions = new int[trackerPositionsLength()];
+    for (int _j = 0; _j < trackerPositionsLength(); ++_j) {_oTrackerPositions[_j] = trackerPositions(_j);}
+    _o.setTrackerPositions(_oTrackerPositions);
+    int _oReferenceTrackerPosition = referenceTrackerPosition();
+    _o.setReferenceTrackerPosition(_oReferenceTrackerPosition);
   }
   public static int pack(FlatBufferBuilder builder, ResetRequestT _o) {
     if (_o == null) return 0;
+    int _trackerPositions = 0;
+    if (_o.getTrackerPositions() != null) {
+      byte[] __trackerPositions = new byte[_o.getTrackerPositions().length];
+      int _j = 0;
+      for (int _e : _o.getTrackerPositions()) { __trackerPositions[_j] = (byte) _e; _j++;}
+      _trackerPositions = createTrackerPositionsVector(builder, __trackerPositions);
+    }
     return createResetRequest(
       builder,
-      _o.getResetType());
+      _o.getResetType(),
+      _trackerPositions,
+      _o.getReferenceTrackerPosition());
   }
 }
 

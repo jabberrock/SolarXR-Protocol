@@ -76,6 +76,8 @@ union RpcMessage {
     MagToggleRequest,
     MagToggleResponse,
     ChangeMagToggleRequest,
+    DetectStayAlignedRelaxedPoseRequest,
+    ResetStayAlignedRelaxedPoseRequest,
 }
 
 table RpcMessageHeader {
@@ -106,6 +108,8 @@ enum ResetStatus: uint8 {
 
 table ResetRequest {
     reset_type: ResetType;
+    trackerPositions: [solarxr_protocol.datatypes.BodyPart];
+    referenceTrackerPosition: solarxr_protocol.datatypes.BodyPart;
 }
 table ResetResponse {
     reset_type: ResetType;
@@ -273,6 +277,17 @@ table ResetsSettings {
 table YawCorrectionSettings {
     enabled: bool;
     amountInDegPerSec: float32;
+
+    /// Relaxed body angles
+    standingUpperLegAngle: float32;
+    standingLowerLegAngle: float32;
+    standingFootAngle: float32;
+    sittingUpperLegAngle: float32;
+    sittingLowerLegAngle: float32;
+    sittingFootAngle: float32;
+    flatUpperLegAngle: float32;
+    flatLowerLegAngle: float32;
+    flatFootAngle: float32;
 }
 
 /// See TapDetectionSettings::setup_mode
@@ -768,4 +783,18 @@ table MagToggleResponse {
 table ChangeMagToggleRequest {
     tracker_id: solarxr_protocol.datatypes.TrackerId;
     enable: bool;
+}
+
+enum StayAlignedRelaxedPose: uint8 {
+    STANDING = 0,
+    SITTING = 1,
+    FLAT = 2
+}
+
+table DetectStayAlignedRelaxedPoseRequest {
+    pose: StayAlignedRelaxedPose;
+}
+
+table ResetStayAlignedRelaxedPoseRequest {
+    pose: StayAlignedRelaxedPose;
 }

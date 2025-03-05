@@ -21,6 +21,25 @@ class ResetRequest : Table() {
             val o = __offset(4)
             return if(o != 0) bb.get(o + bb_pos).toUByte() else 0u
         }
+    fun trackerPositions(j: Int) : UByte {
+        val o = __offset(6)
+        return if (o != 0) {
+            bb.get(__vector(o) + j * 1).toUByte()
+        } else {
+            0u
+        }
+    }
+    val trackerPositionsLength : Int
+        get() {
+            val o = __offset(6); return if (o != 0) __vector_len(o) else 0
+        }
+    val trackerPositionsAsByteBuffer : ByteBuffer get() = __vector_as_bytebuffer(6, 1)
+    fun trackerPositionsInByteBuffer(_bb: ByteBuffer) : ByteBuffer = __vector_in_bytebuffer(_bb, 6, 1)
+    val referenceTrackerPosition : UByte
+        get() {
+            val o = __offset(8)
+            return if(o != 0) bb.get(o + bb_pos).toUByte() else 0u
+        }
     companion object {
         @JvmStatic
         fun validateVersion() = Constants.FLATBUFFERS_22_10_26()
@@ -32,15 +51,31 @@ class ResetRequest : Table() {
             return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb))
         }
         @JvmStatic
-        fun createResetRequest(builder: FlatBufferBuilder, resetType: UByte) : Int {
-            builder.startTable(1)
+        fun createResetRequest(builder: FlatBufferBuilder, resetType: UByte, trackerPositionsOffset: Int, referenceTrackerPosition: UByte) : Int {
+            builder.startTable(3)
+            addTrackerPositions(builder, trackerPositionsOffset)
+            addReferenceTrackerPosition(builder, referenceTrackerPosition)
             addResetType(builder, resetType)
             return endResetRequest(builder)
         }
         @JvmStatic
-        fun startResetRequest(builder: FlatBufferBuilder) = builder.startTable(1)
+        fun startResetRequest(builder: FlatBufferBuilder) = builder.startTable(3)
         @JvmStatic
         fun addResetType(builder: FlatBufferBuilder, resetType: UByte) = builder.addByte(0, resetType.toByte(), 0)
+        @JvmStatic
+        fun addTrackerPositions(builder: FlatBufferBuilder, trackerPositions: Int) = builder.addOffset(1, trackerPositions, 0)
+        @JvmStatic
+        fun createTrackerPositionsVector(builder: FlatBufferBuilder, data: UByteArray) : Int {
+            builder.startVector(1, data.size, 1)
+            for (i in data.size - 1 downTo 0) {
+                builder.addByte(data[i].toByte())
+            }
+            return builder.endVector()
+        }
+        @JvmStatic
+        fun startTrackerPositionsVector(builder: FlatBufferBuilder, numElems: Int) = builder.startVector(1, numElems, 1)
+        @JvmStatic
+        fun addReferenceTrackerPosition(builder: FlatBufferBuilder, referenceTrackerPosition: UByte) = builder.addByte(2, referenceTrackerPosition.toByte(), 0)
         @JvmStatic
         fun endResetRequest(builder: FlatBufferBuilder) : Int {
             val o = builder.endTable()

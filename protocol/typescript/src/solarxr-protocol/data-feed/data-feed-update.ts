@@ -3,6 +3,7 @@
 import * as flatbuffers from 'flatbuffers';
 
 import { Bone, BoneT } from '../../solarxr-protocol/data-feed/bone.js';
+import { StayAlignedPose } from '../../solarxr-protocol/data-feed/stay-aligned-pose.js';
 import { DeviceData, DeviceDataT } from '../../solarxr-protocol/data-feed/device-data/device-data.js';
 import { TrackerData, TrackerDataT } from '../../solarxr-protocol/data-feed/tracker/tracker-data.js';
 
@@ -67,8 +68,13 @@ bonesLength():number {
   return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
 }
 
+stayAlignedPose():StayAlignedPose {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : StayAlignedPose.UNKNOWN;
+}
+
 static startDataFeedUpdate(builder:flatbuffers.Builder) {
-  builder.startObject(3);
+  builder.startObject(4);
 }
 
 static addDevices(builder:flatbuffers.Builder, devicesOffset:flatbuffers.Offset) {
@@ -119,16 +125,21 @@ static startBonesVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(4, numElems, 4);
 }
 
+static addStayAlignedPose(builder:flatbuffers.Builder, stayAlignedPose:StayAlignedPose) {
+  builder.addFieldInt8(3, stayAlignedPose, StayAlignedPose.UNKNOWN);
+}
+
 static endDataFeedUpdate(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createDataFeedUpdate(builder:flatbuffers.Builder, devicesOffset:flatbuffers.Offset, syntheticTrackersOffset:flatbuffers.Offset, bonesOffset:flatbuffers.Offset):flatbuffers.Offset {
+static createDataFeedUpdate(builder:flatbuffers.Builder, devicesOffset:flatbuffers.Offset, syntheticTrackersOffset:flatbuffers.Offset, bonesOffset:flatbuffers.Offset, stayAlignedPose:StayAlignedPose):flatbuffers.Offset {
   DataFeedUpdate.startDataFeedUpdate(builder);
   DataFeedUpdate.addDevices(builder, devicesOffset);
   DataFeedUpdate.addSyntheticTrackers(builder, syntheticTrackersOffset);
   DataFeedUpdate.addBones(builder, bonesOffset);
+  DataFeedUpdate.addStayAlignedPose(builder, stayAlignedPose);
   return DataFeedUpdate.endDataFeedUpdate(builder);
 }
 
@@ -136,7 +147,8 @@ unpack(): DataFeedUpdateT {
   return new DataFeedUpdateT(
     this.bb!.createObjList<DeviceData, DeviceDataT>(this.devices.bind(this), this.devicesLength()),
     this.bb!.createObjList<TrackerData, TrackerDataT>(this.syntheticTrackers.bind(this), this.syntheticTrackersLength()),
-    this.bb!.createObjList<Bone, BoneT>(this.bones.bind(this), this.bonesLength())
+    this.bb!.createObjList<Bone, BoneT>(this.bones.bind(this), this.bonesLength()),
+    this.stayAlignedPose()
   );
 }
 
@@ -145,6 +157,7 @@ unpackTo(_o: DataFeedUpdateT): void {
   _o.devices = this.bb!.createObjList<DeviceData, DeviceDataT>(this.devices.bind(this), this.devicesLength());
   _o.syntheticTrackers = this.bb!.createObjList<TrackerData, TrackerDataT>(this.syntheticTrackers.bind(this), this.syntheticTrackersLength());
   _o.bones = this.bb!.createObjList<Bone, BoneT>(this.bones.bind(this), this.bonesLength());
+  _o.stayAlignedPose = this.stayAlignedPose();
 }
 }
 
@@ -152,7 +165,8 @@ export class DataFeedUpdateT implements flatbuffers.IGeneratedObject {
 constructor(
   public devices: (DeviceDataT)[] = [],
   public syntheticTrackers: (TrackerDataT)[] = [],
-  public bones: (BoneT)[] = []
+  public bones: (BoneT)[] = [],
+  public stayAlignedPose: StayAlignedPose = StayAlignedPose.UNKNOWN
 ){}
 
 
@@ -164,7 +178,8 @@ pack(builder:flatbuffers.Builder): flatbuffers.Offset {
   return DataFeedUpdate.createDataFeedUpdate(builder,
     devices,
     syntheticTrackers,
-    bones
+    bones,
+    this.stayAlignedPose
   );
 }
 }

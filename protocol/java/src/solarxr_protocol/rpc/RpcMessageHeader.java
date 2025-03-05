@@ -308,6 +308,14 @@ public final class RpcMessageHeader extends Table {
         _oMessageValue = message(new solarxr_protocol.rpc.ChangeMagToggleRequest());
         _oMessage.setValue(_oMessageValue != null ? ((solarxr_protocol.rpc.ChangeMagToggleRequest) _oMessageValue).unpack() : null);
         break;
+      case solarxr_protocol.rpc.RpcMessage.DetectStayAlignedRelaxedPoseRequest:
+        _oMessageValue = message(new solarxr_protocol.rpc.DetectStayAlignedRelaxedPoseRequest());
+        _oMessage.setValue(_oMessageValue != null ? ((solarxr_protocol.rpc.DetectStayAlignedRelaxedPoseRequest) _oMessageValue).unpack() : null);
+        break;
+      case solarxr_protocol.rpc.RpcMessage.ResetStayAlignedRelaxedPoseRequest:
+        _oMessageValue = message(new solarxr_protocol.rpc.ResetStayAlignedRelaxedPoseRequest());
+        _oMessage.setValue(_oMessageValue != null ? ((solarxr_protocol.rpc.ResetStayAlignedRelaxedPoseRequest) _oMessageValue).unpack() : null);
+        break;
       default: break;
     }
     _o.setMessage(_oMessage);

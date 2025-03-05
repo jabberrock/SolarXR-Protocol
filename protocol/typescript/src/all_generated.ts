@@ -8,6 +8,8 @@ export { DataFeedMessageHeader, DataFeedMessageHeaderT } from './solarxr-protoco
 export { DataFeedUpdate, DataFeedUpdateT } from './solarxr-protocol/data-feed/data-feed-update.js';
 export { PollDataFeed, PollDataFeedT } from './solarxr-protocol/data-feed/poll-data-feed.js';
 export { StartDataFeed, StartDataFeedT } from './solarxr-protocol/data-feed/start-data-feed.js';
+export { StayAlignedPose } from './solarxr-protocol/data-feed/stay-aligned-pose.js';
+export { StayAlignedState, StayAlignedStateT } from './solarxr-protocol/data-feed/stay-aligned-state.js';
 export { DeviceData, DeviceDataT } from './solarxr-protocol/data-feed/device-data/device-data.js';
 export { DeviceDataMask, DeviceDataMaskT } from './solarxr-protocol/data-feed/device-data/device-data-mask.js';
 export { TrackerData, TrackerDataT } from './solarxr-protocol/data-feed/tracker/tracker-data.js';
@@ -67,6 +69,7 @@ export { ClearDriftCompensationRequest, ClearDriftCompensationRequestT } from '.
 export { ClearMountingResetRequest, ClearMountingResetRequestT } from './solarxr-protocol/rpc/clear-mounting-reset-request.js';
 export { CloseSerialRequest, CloseSerialRequestT } from './solarxr-protocol/rpc/close-serial-request.js';
 export { ComputerDirectory } from './solarxr-protocol/rpc/computer-directory.js';
+export { DetectStayAlignedRelaxedPoseRequest, DetectStayAlignedRelaxedPoseRequestT } from './solarxr-protocol/rpc/detect-stay-aligned-relaxed-pose-request.js';
 export { DriftCompensationSettings, DriftCompensationSettingsT } from './solarxr-protocol/rpc/drift-compensation-settings.js';
 export { FilteringSettings, FilteringSettingsT } from './solarxr-protocol/rpc/filtering-settings.js';
 export { FirmwarePart, FirmwarePartT } from './solarxr-protocol/rpc/firmware-part.js';
@@ -99,6 +102,7 @@ export { RecordBVHStatus, RecordBVHStatusT } from './solarxr-protocol/rpc/record
 export { ResetRequest, ResetRequestT } from './solarxr-protocol/rpc/reset-request.js';
 export { ResetResponse, ResetResponseT } from './solarxr-protocol/rpc/reset-response.js';
 export { ResetStatus } from './solarxr-protocol/rpc/reset-status.js';
+export { ResetStayAlignedRelaxedPoseRequest, ResetStayAlignedRelaxedPoseRequestT } from './solarxr-protocol/rpc/reset-stay-aligned-relaxed-pose-request.js';
 export { ResetType } from './solarxr-protocol/rpc/reset-type.js';
 export { ResetsSettings, ResetsSettingsT } from './solarxr-protocol/rpc/resets-settings.js';
 export { RpcMessage, unionToRpcMessage, unionListToRpcMessage } from './solarxr-protocol/rpc/rpc-message.js';
@@ -137,6 +141,7 @@ export { StatusSystemUpdate, StatusSystemUpdateT } from './solarxr-protocol/rpc/
 export { StatusTrackerError, StatusTrackerErrorT } from './solarxr-protocol/rpc/status-tracker-error.js';
 export { StatusTrackerReset, StatusTrackerResetT } from './solarxr-protocol/rpc/status-tracker-reset.js';
 export { StatusUnassignedHMD, StatusUnassignedHMDT } from './solarxr-protocol/rpc/status-unassigned-hmd.js';
+export { StayAlignedRelaxedPose } from './solarxr-protocol/rpc/stay-aligned-relaxed-pose.js';
 export { SteamVRTrackersSetting, SteamVRTrackersSettingT } from './solarxr-protocol/rpc/steam-vrtrackers-setting.js';
 export { StopWifiProvisioningRequest, StopWifiProvisioningRequestT } from './solarxr-protocol/rpc/stop-wifi-provisioning-request.js';
 export { TapDetectionSettings, TapDetectionSettingsT } from './solarxr-protocol/rpc/tap-detection-settings.js';

@@ -27,6 +27,7 @@ include "datatypes/datatypes.fbs";
 include "tracker.fbs";
 include "device_data.fbs";
 include "bone.fbs";
+include "stay_aligned.fbs";
 
 namespace solarxr_protocol.data_feed;
 
@@ -79,6 +80,7 @@ table DataFeedUpdate {
     synthetic_trackers: [solarxr_protocol.data_feed.tracker.TrackerData];
     /// This must represent a set, where there is no more than one bone for a `BodyPart`.
     bones: [solarxr_protocol.data_feed.Bone];
+    stay_aligned_pose: StayAlignedPose;
 }
 
 

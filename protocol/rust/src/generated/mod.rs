@@ -20,8 +20,12 @@ pub mod solarxr_protocol {
       mod tracker_info_generated;
       pub use self::tracker_info_generated::*;
     } // tracker
+    mod stay_aligned_pose_generated;
+    pub use self::stay_aligned_pose_generated::*;
     mod data_feed_message_generated;
     pub use self::data_feed_message_generated::*;
+    mod stay_aligned_state_generated;
+    pub use self::stay_aligned_state_generated::*;
     mod bone_generated;
     pub use self::bone_generated::*;
     mod data_feed_message_header_generated;
@@ -160,6 +164,8 @@ pub mod solarxr_protocol {
     pub use self::firmware_update_device_id_generated::*;
     mod firmware_update_method_generated;
     pub use self::firmware_update_method_generated::*;
+    mod stay_aligned_relaxed_pose_generated;
+    pub use self::stay_aligned_relaxed_pose_generated::*;
     mod rpc_message_header_generated;
     pub use self::rpc_message_header_generated::*;
     mod heartbeat_request_generated;
@@ -336,6 +342,10 @@ pub mod solarxr_protocol {
     pub use self::mag_toggle_response_generated::*;
     mod change_mag_toggle_request_generated;
     pub use self::change_mag_toggle_request_generated::*;
+    mod detect_stay_aligned_relaxed_pose_request_generated;
+    pub use self::detect_stay_aligned_relaxed_pose_request_generated::*;
+    mod reset_stay_aligned_relaxed_pose_request_generated;
+    pub use self::reset_stay_aligned_relaxed_pose_request_generated::*;
   } // rpc
   mod message_bundle_generated;
   pub use self::message_bundle_generated::*;

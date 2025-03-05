@@ -1,0 +1,18 @@
+namespace solarxr_protocol.data_feed;
+
+enum StayAlignedPose: uint8 {
+	UNKNOWN = 0,
+	STANDING = 1,
+	SITTING_IN_CHAIR = 2,
+	SITTING_ON_GROUND = 3,
+	LYING_ON_BACK = 4,
+	KNEELING = 5,
+}
+
+table StayAlignedState {
+    yaw_correction_in_deg: float;
+    locked_error_in_deg: float;
+    center_error_in_deg: float;
+    neighbor_error_in_deg: float;
+    locked: bool;
+}

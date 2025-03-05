@@ -10,6 +10,15 @@ import com.google.flatbuffers.*;
 public class YawCorrectionSettingsT {
   private boolean enabled;
   private float amountInDegPerSec;
+  private float standingUpperLegAngle;
+  private float standingLowerLegAngle;
+  private float standingFootAngle;
+  private float sittingUpperLegAngle;
+  private float sittingLowerLegAngle;
+  private float sittingFootAngle;
+  private float flatUpperLegAngle;
+  private float flatLowerLegAngle;
+  private float flatFootAngle;
 
   public boolean getEnabled() { return enabled; }
 
@@ -19,10 +28,55 @@ public class YawCorrectionSettingsT {
 
   public void setAmountInDegPerSec(float amountInDegPerSec) { this.amountInDegPerSec = amountInDegPerSec; }
 
+  public float getStandingUpperLegAngle() { return standingUpperLegAngle; }
+
+  public void setStandingUpperLegAngle(float standingUpperLegAngle) { this.standingUpperLegAngle = standingUpperLegAngle; }
+
+  public float getStandingLowerLegAngle() { return standingLowerLegAngle; }
+
+  public void setStandingLowerLegAngle(float standingLowerLegAngle) { this.standingLowerLegAngle = standingLowerLegAngle; }
+
+  public float getStandingFootAngle() { return standingFootAngle; }
+
+  public void setStandingFootAngle(float standingFootAngle) { this.standingFootAngle = standingFootAngle; }
+
+  public float getSittingUpperLegAngle() { return sittingUpperLegAngle; }
+
+  public void setSittingUpperLegAngle(float sittingUpperLegAngle) { this.sittingUpperLegAngle = sittingUpperLegAngle; }
+
+  public float getSittingLowerLegAngle() { return sittingLowerLegAngle; }
+
+  public void setSittingLowerLegAngle(float sittingLowerLegAngle) { this.sittingLowerLegAngle = sittingLowerLegAngle; }
+
+  public float getSittingFootAngle() { return sittingFootAngle; }
+
+  public void setSittingFootAngle(float sittingFootAngle) { this.sittingFootAngle = sittingFootAngle; }
+
+  public float getFlatUpperLegAngle() { return flatUpperLegAngle; }
+
+  public void setFlatUpperLegAngle(float flatUpperLegAngle) { this.flatUpperLegAngle = flatUpperLegAngle; }
+
+  public float getFlatLowerLegAngle() { return flatLowerLegAngle; }
+
+  public void setFlatLowerLegAngle(float flatLowerLegAngle) { this.flatLowerLegAngle = flatLowerLegAngle; }
+
+  public float getFlatFootAngle() { return flatFootAngle; }
+
+  public void setFlatFootAngle(float flatFootAngle) { this.flatFootAngle = flatFootAngle; }
+
 
   public YawCorrectionSettingsT() {
     this.enabled = false;
     this.amountInDegPerSec = 0.0f;
+    this.standingUpperLegAngle = 0.0f;
+    this.standingLowerLegAngle = 0.0f;
+    this.standingFootAngle = 0.0f;
+    this.sittingUpperLegAngle = 0.0f;
+    this.sittingLowerLegAngle = 0.0f;
+    this.sittingFootAngle = 0.0f;
+    this.flatUpperLegAngle = 0.0f;
+    this.flatLowerLegAngle = 0.0f;
+    this.flatFootAngle = 0.0f;
   }
 }
 

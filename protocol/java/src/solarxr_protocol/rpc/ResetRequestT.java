@@ -9,14 +9,26 @@ import com.google.flatbuffers.*;
 
 public class ResetRequestT {
   private int resetType;
+  private int[] trackerPositions;
+  private int referenceTrackerPosition;
 
   public int getResetType() { return resetType; }
 
   public void setResetType(int resetType) { this.resetType = resetType; }
 
+  public int[] getTrackerPositions() { return trackerPositions; }
+
+  public void setTrackerPositions(int[] trackerPositions) { this.trackerPositions = trackerPositions; }
+
+  public int getReferenceTrackerPosition() { return referenceTrackerPosition; }
+
+  public void setReferenceTrackerPosition(int referenceTrackerPosition) { this.referenceTrackerPosition = referenceTrackerPosition; }
+
 
   public ResetRequestT() {
     this.resetType = 0;
+    this.trackerPositions = null;
+    this.referenceTrackerPosition = 0;
   }
 }
 

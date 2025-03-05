@@ -26,6 +26,8 @@ impl<'a> flatbuffers::Follow<'a> for ResetRequest<'a> {
 
 impl<'a> ResetRequest<'a> {
   pub const VT_RESET_TYPE: flatbuffers::VOffsetT = 4;
+  pub const VT_TRACKERPOSITIONS: flatbuffers::VOffsetT = 6;
+  pub const VT_REFERENCETRACKERPOSITION: flatbuffers::VOffsetT = 8;
 
   #[inline]
   pub unsafe fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
@@ -34,9 +36,11 @@ impl<'a> ResetRequest<'a> {
   #[allow(unused_mut)]
   pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
     _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-    args: &'args ResetRequestArgs
+    args: &'args ResetRequestArgs<'args>
   ) -> flatbuffers::WIPOffset<ResetRequest<'bldr>> {
     let mut builder = ResetRequestBuilder::new(_fbb);
+    if let Some(x) = args.trackerPositions { builder.add_trackerPositions(x); }
+    builder.add_referenceTrackerPosition(args.referenceTrackerPosition);
     builder.add_reset_type(args.reset_type);
     builder.finish()
   }
@@ -49,6 +53,20 @@ impl<'a> ResetRequest<'a> {
     // which contains a valid value in this slot
     unsafe { self._tab.get::<ResetType>(ResetRequest::VT_RESET_TYPE, Some(ResetType::Yaw)).unwrap()}
   }
+  #[inline]
+  pub fn trackerPositions(&self) -> Option<flatbuffers::Vector<'a, super::datatypes::BodyPart>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<flatbuffers::ForwardsUOffset<flatbuffers::Vector<'a, super::datatypes::BodyPart>>>(ResetRequest::VT_TRACKERPOSITIONS, None)}
+  }
+  #[inline]
+  pub fn referenceTrackerPosition(&self) -> super::datatypes::BodyPart {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<super::datatypes::BodyPart>(ResetRequest::VT_REFERENCETRACKERPOSITION, Some(super::datatypes::BodyPart::NONE)).unwrap()}
+  }
 }
 
 impl flatbuffers::Verifiable for ResetRequest<'_> {
@@ -59,18 +77,24 @@ impl flatbuffers::Verifiable for ResetRequest<'_> {
     use self::flatbuffers::Verifiable;
     v.visit_table(pos)?
      .visit_field::<ResetType>("reset_type", Self::VT_RESET_TYPE, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<flatbuffers::Vector<'_, super::datatypes::BodyPart>>>("trackerPositions", Self::VT_TRACKERPOSITIONS, false)?
+     .visit_field::<super::datatypes::BodyPart>("referenceTrackerPosition", Self::VT_REFERENCETRACKERPOSITION, false)?
      .finish();
     Ok(())
   }
 }
-pub struct ResetRequestArgs {
+pub struct ResetRequestArgs<'a> {
     pub reset_type: ResetType,
+    pub trackerPositions: Option<flatbuffers::WIPOffset<flatbuffers::Vector<'a, super::datatypes::BodyPart>>>,
+    pub referenceTrackerPosition: super::datatypes::BodyPart,
 }
-impl<'a> Default for ResetRequestArgs {
+impl<'a> Default for ResetRequestArgs<'a> {
   #[inline]
   fn default() -> Self {
     ResetRequestArgs {
       reset_type: ResetType::Yaw,
+      trackerPositions: None,
+      referenceTrackerPosition: super::datatypes::BodyPart::NONE,
     }
   }
 }
@@ -83,6 +107,14 @@ impl<'a: 'b, 'b> ResetRequestBuilder<'a, 'b> {
   #[inline]
   pub fn add_reset_type(&mut self, reset_type: ResetType) {
     self.fbb_.push_slot::<ResetType>(ResetRequest::VT_RESET_TYPE, reset_type, ResetType::Yaw);
+  }
+  #[inline]
+  pub fn add_trackerPositions(&mut self, trackerPositions: flatbuffers::WIPOffset<flatbuffers::Vector<'b , super::datatypes::BodyPart>>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(ResetRequest::VT_TRACKERPOSITIONS, trackerPositions);
+  }
+  #[inline]
+  pub fn add_referenceTrackerPosition(&mut self, referenceTrackerPosition: super::datatypes::BodyPart) {
+    self.fbb_.push_slot::<super::datatypes::BodyPart>(ResetRequest::VT_REFERENCETRACKERPOSITION, referenceTrackerPosition, super::datatypes::BodyPart::NONE);
   }
   #[inline]
   pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> ResetRequestBuilder<'a, 'b> {
@@ -103,6 +135,8 @@ impl core::fmt::Debug for ResetRequest<'_> {
   fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
     let mut ds = f.debug_struct("ResetRequest");
       ds.field("reset_type", &self.reset_type());
+      ds.field("trackerPositions", &self.trackerPositions());
+      ds.field("referenceTrackerPosition", &self.referenceTrackerPosition());
       ds.finish()
   }
 }

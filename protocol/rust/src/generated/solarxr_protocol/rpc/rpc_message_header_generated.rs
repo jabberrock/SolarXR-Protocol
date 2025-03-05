@@ -1029,6 +1029,36 @@ impl<'a> RpcMessageHeader<'a> {
     }
   }
 
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_detect_stay_aligned_relaxed_pose_request(&self) -> Option<DetectStayAlignedRelaxedPoseRequest<'a>> {
+    if self.message_type() == RpcMessage::DetectStayAlignedRelaxedPoseRequest {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { DetectStayAlignedRelaxedPoseRequest::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_reset_stay_aligned_relaxed_pose_request(&self) -> Option<ResetStayAlignedRelaxedPoseRequest<'a>> {
+    if self.message_type() == RpcMessage::ResetStayAlignedRelaxedPoseRequest {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { ResetStayAlignedRelaxedPoseRequest::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
 }
 
 impl flatbuffers::Verifiable for RpcMessageHeader<'_> {
@@ -1105,6 +1135,8 @@ impl flatbuffers::Verifiable for RpcMessageHeader<'_> {
           RpcMessage::MagToggleRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<MagToggleRequest>>("RpcMessage::MagToggleRequest", pos),
           RpcMessage::MagToggleResponse => v.verify_union_variant::<flatbuffers::ForwardsUOffset<MagToggleResponse>>("RpcMessage::MagToggleResponse", pos),
           RpcMessage::ChangeMagToggleRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<ChangeMagToggleRequest>>("RpcMessage::ChangeMagToggleRequest", pos),
+          RpcMessage::DetectStayAlignedRelaxedPoseRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<DetectStayAlignedRelaxedPoseRequest>>("RpcMessage::DetectStayAlignedRelaxedPoseRequest", pos),
+          RpcMessage::ResetStayAlignedRelaxedPoseRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<ResetStayAlignedRelaxedPoseRequest>>("RpcMessage::ResetStayAlignedRelaxedPoseRequest", pos),
           _ => Ok(()),
         }
      })?
@@ -1609,6 +1641,20 @@ impl core::fmt::Debug for RpcMessageHeader<'_> {
         },
         RpcMessage::ChangeMagToggleRequest => {
           if let Some(x) = self.message_as_change_mag_toggle_request() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::DetectStayAlignedRelaxedPoseRequest => {
+          if let Some(x) = self.message_as_detect_stay_aligned_relaxed_pose_request() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::ResetStayAlignedRelaxedPoseRequest => {
+          if let Some(x) = self.message_as_reset_stay_aligned_relaxed_pose_request() {
             ds.field("message", &x)
           } else {
             ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
