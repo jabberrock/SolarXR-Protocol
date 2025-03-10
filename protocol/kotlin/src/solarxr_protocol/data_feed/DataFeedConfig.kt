@@ -52,6 +52,11 @@ class DataFeedConfig : Table() {
             val o = __offset(10)
             return if(o != 0) 0.toByte() != bb.get(o + bb_pos) else false
         }
+    val stayAlignedMask : Boolean
+        get() {
+            val o = __offset(12)
+            return if(o != 0) 0.toByte() != bb.get(o + bb_pos) else false
+        }
     companion object {
         @JvmStatic
         fun validateVersion() = Constants.FLATBUFFERS_22_10_26()
@@ -63,16 +68,17 @@ class DataFeedConfig : Table() {
             return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb))
         }
         @JvmStatic
-        fun createDataFeedConfig(builder: FlatBufferBuilder, minimumTimeSinceLast: UShort, dataMaskOffset: Int, syntheticTrackersMaskOffset: Int, boneMask: Boolean) : Int {
-            builder.startTable(4)
+        fun createDataFeedConfig(builder: FlatBufferBuilder, minimumTimeSinceLast: UShort, dataMaskOffset: Int, syntheticTrackersMaskOffset: Int, boneMask: Boolean, stayAlignedMask: Boolean) : Int {
+            builder.startTable(5)
             addSyntheticTrackersMask(builder, syntheticTrackersMaskOffset)
             addDataMask(builder, dataMaskOffset)
             addMinimumTimeSinceLast(builder, minimumTimeSinceLast)
+            addStayAlignedMask(builder, stayAlignedMask)
             addBoneMask(builder, boneMask)
             return endDataFeedConfig(builder)
         }
         @JvmStatic
-        fun startDataFeedConfig(builder: FlatBufferBuilder) = builder.startTable(4)
+        fun startDataFeedConfig(builder: FlatBufferBuilder) = builder.startTable(5)
         @JvmStatic
         fun addMinimumTimeSinceLast(builder: FlatBufferBuilder, minimumTimeSinceLast: UShort) = builder.addShort(0, minimumTimeSinceLast.toShort(), 0)
         @JvmStatic
@@ -81,6 +87,8 @@ class DataFeedConfig : Table() {
         fun addSyntheticTrackersMask(builder: FlatBufferBuilder, syntheticTrackersMask: Int) = builder.addOffset(2, syntheticTrackersMask, 0)
         @JvmStatic
         fun addBoneMask(builder: FlatBufferBuilder, boneMask: Boolean) = builder.addBoolean(3, boneMask, false)
+        @JvmStatic
+        fun addStayAlignedMask(builder: FlatBufferBuilder, stayAlignedMask: Boolean) = builder.addBoolean(4, stayAlignedMask, false)
         @JvmStatic
         fun endDataFeedConfig(builder: FlatBufferBuilder) : Int {
             val o = builder.endTable()
