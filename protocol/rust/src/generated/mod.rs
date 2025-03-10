@@ -11,6 +11,13 @@ pub mod solarxr_protocol {
       mod device_data_generated;
       pub use self::device_data_generated::*;
     } // device_data
+    pub mod stay_aligned {
+      use super::*;
+      mod stay_aligned_data_generated;
+      pub use self::stay_aligned_data_generated::*;
+      mod stay_aligned_tracker_generated;
+      pub use self::stay_aligned_tracker_generated::*;
+    } // stay_aligned
     pub mod tracker {
       use super::*;
       mod tracker_data_generated;
@@ -160,6 +167,8 @@ pub mod solarxr_protocol {
     pub use self::firmware_update_device_id_generated::*;
     mod firmware_update_method_generated;
     pub use self::firmware_update_method_generated::*;
+    mod stay_aligned_relaxed_pose_generated;
+    pub use self::stay_aligned_relaxed_pose_generated::*;
     mod rpc_message_header_generated;
     pub use self::rpc_message_header_generated::*;
     mod heartbeat_request_generated;
@@ -200,8 +209,8 @@ pub mod solarxr_protocol {
     pub use self::tap_detection_settings_generated::*;
     mod resets_settings_generated;
     pub use self::resets_settings_generated::*;
-    mod yaw_correction_settings_generated;
-    pub use self::yaw_correction_settings_generated::*;
+    mod stay_aligned_settings_generated;
+    pub use self::stay_aligned_settings_generated::*;
     mod tap_detection_setup_notification_generated;
     pub use self::tap_detection_setup_notification_generated::*;
     mod record_bvhrequest_generated;
@@ -338,6 +347,12 @@ pub mod solarxr_protocol {
     pub use self::mag_toggle_response_generated::*;
     mod change_mag_toggle_request_generated;
     pub use self::change_mag_toggle_request_generated::*;
+    mod enable_stay_aligned_request_generated;
+    pub use self::enable_stay_aligned_request_generated::*;
+    mod detect_stay_aligned_relaxed_pose_request_generated;
+    pub use self::detect_stay_aligned_relaxed_pose_request_generated::*;
+    mod reset_stay_aligned_relaxed_pose_request_generated;
+    pub use self::reset_stay_aligned_relaxed_pose_request_generated::*;
   } // rpc
   mod message_bundle_generated;
   pub use self::message_bundle_generated::*;
