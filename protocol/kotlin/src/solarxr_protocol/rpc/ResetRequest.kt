@@ -21,6 +21,30 @@ class ResetRequest : Table() {
             val o = __offset(4)
             return if(o != 0) bb.get(o + bb_pos).toUByte() else 0u
         }
+    val bodyPose : UByte?
+        get() {
+            val o = __offset(6)
+            return if(o != 0) bb.get(o + bb_pos).toUByte() else null
+        }
+    val referenceTracker : UByte?
+        get() {
+            val o = __offset(8)
+            return if(o != 0) bb.get(o + bb_pos).toUByte() else null
+        }
+    fun trackers(j: Int) : UByte {
+        val o = __offset(10)
+        return if (o != 0) {
+            bb.get(__vector(o) + j * 1).toUByte()
+        } else {
+            0u
+        }
+    }
+    val trackersLength : Int
+        get() {
+            val o = __offset(10); return if (o != 0) __vector_len(o) else 0
+        }
+    val trackersAsByteBuffer : ByteBuffer get() = __vector_as_bytebuffer(10, 1)
+    fun trackersInByteBuffer(_bb: ByteBuffer) : ByteBuffer = __vector_in_bytebuffer(_bb, 10, 1)
     companion object {
         @JvmStatic
         fun validateVersion() = Constants.FLATBUFFERS_22_10_26()
@@ -32,15 +56,34 @@ class ResetRequest : Table() {
             return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb))
         }
         @JvmStatic
-        fun createResetRequest(builder: FlatBufferBuilder, resetType: UByte) : Int {
-            builder.startTable(1)
+        fun createResetRequest(builder: FlatBufferBuilder, resetType: UByte, bodyPose: UByte?, referenceTracker: UByte?, trackersOffset: Int) : Int {
+            builder.startTable(4)
+            addTrackers(builder, trackersOffset)
+            referenceTracker?.run { addReferenceTracker(builder, referenceTracker) }
+            bodyPose?.run { addBodyPose(builder, bodyPose) }
             addResetType(builder, resetType)
             return endResetRequest(builder)
         }
         @JvmStatic
-        fun startResetRequest(builder: FlatBufferBuilder) = builder.startTable(1)
+        fun startResetRequest(builder: FlatBufferBuilder) = builder.startTable(4)
         @JvmStatic
         fun addResetType(builder: FlatBufferBuilder, resetType: UByte) = builder.addByte(0, resetType.toByte(), 0)
+        @JvmStatic
+        fun addBodyPose(builder: FlatBufferBuilder, bodyPose: UByte) = builder.addByte(1, bodyPose.toByte(), 0)
+        @JvmStatic
+        fun addReferenceTracker(builder: FlatBufferBuilder, referenceTracker: UByte) = builder.addByte(2, referenceTracker.toByte(), 0)
+        @JvmStatic
+        fun addTrackers(builder: FlatBufferBuilder, trackers: Int) = builder.addOffset(3, trackers, 0)
+        @JvmStatic
+        fun createTrackersVector(builder: FlatBufferBuilder, data: UByteArray) : Int {
+            builder.startVector(1, data.size, 1)
+            for (i in data.size - 1 downTo 0) {
+                builder.addByte(data[i].toByte())
+            }
+            return builder.endVector()
+        }
+        @JvmStatic
+        fun startTrackersVector(builder: FlatBufferBuilder, numElems: Int) = builder.startVector(1, numElems, 1)
         @JvmStatic
         fun endResetRequest(builder: FlatBufferBuilder) : Int {
             val o = builder.endTable()

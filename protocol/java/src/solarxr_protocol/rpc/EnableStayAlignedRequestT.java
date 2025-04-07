@@ -8,9 +8,15 @@ import java.util.*;
 import com.google.flatbuffers.*;
 
 public class EnableStayAlignedRequestT {
+  private boolean enable;
+
+  public boolean getEnable() { return enable; }
+
+  public void setEnable(boolean enable) { this.enable = enable; }
 
 
   public EnableStayAlignedRequestT() {
+    this.enable = false;
   }
 }
 

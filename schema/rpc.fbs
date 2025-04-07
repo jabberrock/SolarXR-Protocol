@@ -102,6 +102,11 @@ enum ResetType: uint8 {
     Mounting,
 }
 
+enum ResetBodyPose: uint8 {
+    SKIING,
+    SITTING_LEANING_BACK,
+}
+
 
 enum ResetStatus: uint8 {
     STARTED,
@@ -110,6 +115,9 @@ enum ResetStatus: uint8 {
 
 table ResetRequest {
     reset_type: ResetType;
+    bodyPose: ResetBodyPose = null;
+    referenceTracker: solarxr_protocol.datatypes.BodyPart = null;
+    trackers: [solarxr_protocol.datatypes.BodyPart];
 }
 table ResetResponse {
     reset_type: ResetType;
@@ -787,6 +795,7 @@ table ChangeMagToggleRequest {
 }
 
 table EnableStayAlignedRequest {
+    enable: bool;
 }
 
 enum StayAlignedRelaxedPose: uint8 {

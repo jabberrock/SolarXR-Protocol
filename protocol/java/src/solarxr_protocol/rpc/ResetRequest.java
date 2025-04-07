@@ -16,16 +16,38 @@ public final class ResetRequest extends Table {
   public ResetRequest __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public int resetType() { int o = __offset(4); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
+  public boolean hasBodyPose() { return 0 != __offset(6); }
+  public int bodyPose() { int o = __offset(6); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
+  public boolean hasReferenceTracker() { return 0 != __offset(8); }
+  public int referenceTracker() { int o = __offset(8); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
+  public int trackers(int j) { int o = __offset(10); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
+  public int trackersLength() { int o = __offset(10); return o != 0 ? __vector_len(o) : 0; }
+  public ByteVector trackersVector() { return trackersVector(new ByteVector()); }
+  public ByteVector trackersVector(ByteVector obj) { int o = __offset(10); return o != 0 ? obj.__assign(__vector(o), bb) : null; }
+  public ByteBuffer trackersAsByteBuffer() { return __vector_as_bytebuffer(10, 1); }
+  public ByteBuffer trackersInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 10, 1); }
 
   public static int createResetRequest(FlatBufferBuilder builder,
-      int resetType) {
-    builder.startTable(1);
+      int resetType,
+      int bodyPose,
+      int referenceTracker,
+      int trackersOffset) {
+    builder.startTable(4);
+    ResetRequest.addTrackers(builder, trackersOffset);
+    ResetRequest.addReferenceTracker(builder, referenceTracker);
+    ResetRequest.addBodyPose(builder, bodyPose);
     ResetRequest.addResetType(builder, resetType);
     return ResetRequest.endResetRequest(builder);
   }
 
-  public static void startResetRequest(FlatBufferBuilder builder) { builder.startTable(1); }
+  public static void startResetRequest(FlatBufferBuilder builder) { builder.startTable(4); }
   public static void addResetType(FlatBufferBuilder builder, int resetType) { builder.addByte(0, (byte) resetType, (byte) 0); }
+  public static void addBodyPose(FlatBufferBuilder builder, int bodyPose) { builder.addByte(1, (byte) bodyPose, (byte) 0); }
+  public static void addReferenceTracker(FlatBufferBuilder builder, int referenceTracker) { builder.addByte(2, (byte) referenceTracker, (byte) 0); }
+  public static void addTrackers(FlatBufferBuilder builder, int trackersOffset) { builder.addOffset(3, trackersOffset, 0); }
+  public static int createTrackersVector(FlatBufferBuilder builder, byte[] data) { return builder.createByteVector(data); }
+  public static int createTrackersVector(FlatBufferBuilder builder, ByteBuffer data) { return builder.createByteVector(data); }
+  public static void startTrackersVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
   public static int endResetRequest(FlatBufferBuilder builder) {
     int o = builder.endTable();
     return o;
@@ -45,12 +67,29 @@ public final class ResetRequest extends Table {
   public void unpackTo(ResetRequestT _o) {
     int _oResetType = resetType();
     _o.setResetType(_oResetType);
+    Integer _oBodyPose = hasBodyPose() ? bodyPose() : null;
+    _o.setBodyPose(_oBodyPose);
+    Integer _oReferenceTracker = hasReferenceTracker() ? referenceTracker() : null;
+    _o.setReferenceTracker(_oReferenceTracker);
+    int[] _oTrackers = new int[trackersLength()];
+    for (int _j = 0; _j < trackersLength(); ++_j) {_oTrackers[_j] = trackers(_j);}
+    _o.setTrackers(_oTrackers);
   }
   public static int pack(FlatBufferBuilder builder, ResetRequestT _o) {
     if (_o == null) return 0;
+    int _trackers = 0;
+    if (_o.getTrackers() != null) {
+      byte[] __trackers = new byte[_o.getTrackers().length];
+      int _j = 0;
+      for (int _e : _o.getTrackers()) { __trackers[_j] = (byte) _e; _j++;}
+      _trackers = createTrackersVector(builder, __trackers);
+    }
     return createResetRequest(
       builder,
-      _o.getResetType());
+      _o.getResetType(),
+      _o.getBodyPose(),
+      _o.getReferenceTracker(),
+      _trackers);
   }
 }
 

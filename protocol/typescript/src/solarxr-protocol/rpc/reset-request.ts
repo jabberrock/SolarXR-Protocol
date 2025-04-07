@@ -2,6 +2,8 @@
 
 import * as flatbuffers from 'flatbuffers';
 
+import { BodyPart } from '../../solarxr-protocol/datatypes/body-part.js';
+import { ResetBodyPose } from '../../solarxr-protocol/rpc/reset-body-pose.js';
 import { ResetType } from '../../solarxr-protocol/rpc/reset-type.js';
 
 
@@ -28,12 +30,61 @@ resetType():ResetType {
   return offset ? this.bb!.readUint8(this.bb_pos + offset) : ResetType.Yaw;
 }
 
+bodyPose():ResetBodyPose|null {
+  const offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : null;
+}
+
+referenceTracker():BodyPart|null {
+  const offset = this.bb!.__offset(this.bb_pos, 8);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : null;
+}
+
+trackers(index: number):BodyPart|null {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? this.bb!.readUint8(this.bb!.__vector(this.bb_pos + offset) + index) : 0;
+}
+
+trackersLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
+trackersArray():Uint8Array|null {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? new Uint8Array(this.bb!.bytes().buffer, this.bb!.bytes().byteOffset + this.bb!.__vector(this.bb_pos + offset), this.bb!.__vector_len(this.bb_pos + offset)) : null;
+}
+
 static startResetRequest(builder:flatbuffers.Builder) {
-  builder.startObject(1);
+  builder.startObject(4);
 }
 
 static addResetType(builder:flatbuffers.Builder, resetType:ResetType) {
   builder.addFieldInt8(0, resetType, ResetType.Yaw);
+}
+
+static addBodyPose(builder:flatbuffers.Builder, bodyPose:ResetBodyPose) {
+  builder.addFieldInt8(1, bodyPose, 0);
+}
+
+static addReferenceTracker(builder:flatbuffers.Builder, referenceTracker:BodyPart) {
+  builder.addFieldInt8(2, referenceTracker, 0);
+}
+
+static addTrackers(builder:flatbuffers.Builder, trackersOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(3, trackersOffset, 0);
+}
+
+static createTrackersVector(builder:flatbuffers.Builder, data:BodyPart[]):flatbuffers.Offset {
+  builder.startVector(1, data.length, 1);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addInt8(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startTrackersVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(1, numElems, 1);
 }
 
 static endResetRequest(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -41,33 +92,52 @@ static endResetRequest(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createResetRequest(builder:flatbuffers.Builder, resetType:ResetType):flatbuffers.Offset {
+static createResetRequest(builder:flatbuffers.Builder, resetType:ResetType, bodyPose:ResetBodyPose|null, referenceTracker:BodyPart|null, trackersOffset:flatbuffers.Offset):flatbuffers.Offset {
   ResetRequest.startResetRequest(builder);
   ResetRequest.addResetType(builder, resetType);
+  if (bodyPose !== null)
+    ResetRequest.addBodyPose(builder, bodyPose);
+  if (referenceTracker !== null)
+    ResetRequest.addReferenceTracker(builder, referenceTracker);
+  ResetRequest.addTrackers(builder, trackersOffset);
   return ResetRequest.endResetRequest(builder);
 }
 
 unpack(): ResetRequestT {
   return new ResetRequestT(
-    this.resetType()
+    this.resetType(),
+    this.bodyPose(),
+    this.referenceTracker(),
+    this.bb!.createScalarList<BodyPart>(this.trackers.bind(this), this.trackersLength())
   );
 }
 
 
 unpackTo(_o: ResetRequestT): void {
   _o.resetType = this.resetType();
+  _o.bodyPose = this.bodyPose();
+  _o.referenceTracker = this.referenceTracker();
+  _o.trackers = this.bb!.createScalarList<BodyPart>(this.trackers.bind(this), this.trackersLength());
 }
 }
 
 export class ResetRequestT implements flatbuffers.IGeneratedObject {
 constructor(
-  public resetType: ResetType = ResetType.Yaw
+  public resetType: ResetType = ResetType.Yaw,
+  public bodyPose: ResetBodyPose|null = null,
+  public referenceTracker: BodyPart|null = null,
+  public trackers: (BodyPart)[] = []
 ){}
 
 
 pack(builder:flatbuffers.Builder): flatbuffers.Offset {
+  const trackers = ResetRequest.createTrackersVector(builder, this.trackers);
+
   return ResetRequest.createResetRequest(builder,
-    this.resetType
+    this.resetType,
+    this.bodyPose,
+    this.referenceTracker,
+    trackers
   );
 }
 }

@@ -16,6 +16,11 @@ class EnableStayAlignedRequest : Table() {
         __init(_i, _bb)
         return this
     }
+    val enable : Boolean
+        get() {
+            val o = __offset(4)
+            return if(o != 0) 0.toByte() != bb.get(o + bb_pos) else false
+        }
     companion object {
         @JvmStatic
         fun validateVersion() = Constants.FLATBUFFERS_22_10_26()
@@ -27,7 +32,15 @@ class EnableStayAlignedRequest : Table() {
             return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb))
         }
         @JvmStatic
-        fun startEnableStayAlignedRequest(builder: FlatBufferBuilder) = builder.startTable(0)
+        fun createEnableStayAlignedRequest(builder: FlatBufferBuilder, enable: Boolean) : Int {
+            builder.startTable(1)
+            addEnable(builder, enable)
+            return endEnableStayAlignedRequest(builder)
+        }
+        @JvmStatic
+        fun startEnableStayAlignedRequest(builder: FlatBufferBuilder) = builder.startTable(1)
+        @JvmStatic
+        fun addEnable(builder: FlatBufferBuilder, enable: Boolean) = builder.addBoolean(0, enable, false)
         @JvmStatic
         fun endEnableStayAlignedRequest(builder: FlatBufferBuilder) : Int {
             val o = builder.endTable()
