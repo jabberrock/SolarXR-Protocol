@@ -99,6 +99,8 @@ public class RpcMessageUnion {
   public solarxr_protocol.rpc.StartUserHeightCalibrationT asStartUserHeightCalibration() { return (solarxr_protocol.rpc.StartUserHeightCalibrationT) value; }
   public solarxr_protocol.rpc.CancelUserHeightCalibrationT asCancelUserHeightCalibration() { return (solarxr_protocol.rpc.CancelUserHeightCalibrationT) value; }
   public solarxr_protocol.rpc.UserHeightRecordingStatusResponseT asUserHeightRecordingStatusResponse() { return (solarxr_protocol.rpc.UserHeightRecordingStatusResponseT) value; }
+  public solarxr_protocol.rpc.RecordPFSRequestT asRecordPFSRequest() { return (solarxr_protocol.rpc.RecordPFSRequestT) value; }
+  public solarxr_protocol.rpc.RecordPFSResponseT asRecordPFSResponse() { return (solarxr_protocol.rpc.RecordPFSResponseT) value; }
 
   public static int pack(FlatBufferBuilder builder, RpcMessageUnion _o) {
     switch (_o.type) {
@@ -180,6 +182,8 @@ public class RpcMessageUnion {
       case RpcMessage.StartUserHeightCalibration: return solarxr_protocol.rpc.StartUserHeightCalibration.pack(builder, _o.asStartUserHeightCalibration());
       case RpcMessage.CancelUserHeightCalibration: return solarxr_protocol.rpc.CancelUserHeightCalibration.pack(builder, _o.asCancelUserHeightCalibration());
       case RpcMessage.UserHeightRecordingStatusResponse: return solarxr_protocol.rpc.UserHeightRecordingStatusResponse.pack(builder, _o.asUserHeightRecordingStatusResponse());
+      case RpcMessage.RecordPFSRequest: return solarxr_protocol.rpc.RecordPFSRequest.pack(builder, _o.asRecordPFSRequest());
+      case RpcMessage.RecordPFSResponse: return solarxr_protocol.rpc.RecordPFSResponse.pack(builder, _o.asRecordPFSResponse());
       default: return 0;
     }
   }

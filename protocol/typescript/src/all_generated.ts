@@ -105,6 +105,8 @@ export { OverlayDisplayModeResponse, OverlayDisplayModeResponseT } from './solar
 export { RecordBVHRequest, RecordBVHRequestT } from './solarxr-protocol/rpc/record-bvhrequest.js';
 export { RecordBVHStatus, RecordBVHStatusT } from './solarxr-protocol/rpc/record-bvhstatus.js';
 export { RecordBVHStatusRequest, RecordBVHStatusRequestT } from './solarxr-protocol/rpc/record-bvhstatus-request.js';
+export { RecordPFSRequest, RecordPFSRequestT } from './solarxr-protocol/rpc/record-pfsrequest.js';
+export { RecordPFSResponse, RecordPFSResponseT } from './solarxr-protocol/rpc/record-pfsresponse.js';
 export { ResetRequest, ResetRequestT } from './solarxr-protocol/rpc/reset-request.js';
 export { ResetResponse, ResetResponseT } from './solarxr-protocol/rpc/reset-response.js';
 export { ResetStatus } from './solarxr-protocol/rpc/reset-status.js';

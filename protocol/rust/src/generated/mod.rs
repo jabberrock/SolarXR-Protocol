@@ -416,6 +416,10 @@ pub mod solarxr_protocol {
     pub use self::cancel_user_height_calibration_generated::*;
     mod user_height_recording_status_response_generated;
     pub use self::user_height_recording_status_response_generated::*;
+    mod record_pfsrequest_generated;
+    pub use self::record_pfsrequest_generated::*;
+    mod record_pfsresponse_generated;
+    pub use self::record_pfsresponse_generated::*;
   } // rpc
   mod message_bundle_generated;
   pub use self::message_bundle_generated::*;

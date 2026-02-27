@@ -14,3 +14,4 @@ Remove-Item -ErrorAction Ignore -Recurse  protocol/kotlin/src
 ./flatc.exe --ts --gen-object-api --gen-all -o protocol/typescript/src -I ./schema/ ./schema/all.fbs
 ./flatc.exe --rust --rust-module-root-file --gen-all -o protocol/rust/src/generated ./schema/all.fbs
 ./flatc.exe --kotlin --gen-jvmstatic --gen-all -o ./protocol/kotlin/src -I ./schema/ ./schema/all.fbs
+./flatc.exe --swift --gen-all -o ./protocol/swift -I ./schema/ ./schema/all.fbs

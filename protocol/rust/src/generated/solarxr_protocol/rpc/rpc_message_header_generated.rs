@@ -1239,6 +1239,36 @@ impl<'a> RpcMessageHeader<'a> {
     }
   }
 
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_record_pfsrequest(&self) -> Option<RecordPFSRequest<'a>> {
+    if self.message_type() == RpcMessage::RecordPFSRequest {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { RecordPFSRequest::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_record_pfsresponse(&self) -> Option<RecordPFSResponse<'a>> {
+    if self.message_type() == RpcMessage::RecordPFSResponse {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { RecordPFSResponse::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
 }
 
 impl flatbuffers::Verifiable for RpcMessageHeader<'_> {
@@ -1329,6 +1359,8 @@ impl flatbuffers::Verifiable for RpcMessageHeader<'_> {
           RpcMessage::StartUserHeightCalibration => v.verify_union_variant::<flatbuffers::ForwardsUOffset<StartUserHeightCalibration>>("RpcMessage::StartUserHeightCalibration", pos),
           RpcMessage::CancelUserHeightCalibration => v.verify_union_variant::<flatbuffers::ForwardsUOffset<CancelUserHeightCalibration>>("RpcMessage::CancelUserHeightCalibration", pos),
           RpcMessage::UserHeightRecordingStatusResponse => v.verify_union_variant::<flatbuffers::ForwardsUOffset<UserHeightRecordingStatusResponse>>("RpcMessage::UserHeightRecordingStatusResponse", pos),
+          RpcMessage::RecordPFSRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<RecordPFSRequest>>("RpcMessage::RecordPFSRequest", pos),
+          RpcMessage::RecordPFSResponse => v.verify_union_variant::<flatbuffers::ForwardsUOffset<RecordPFSResponse>>("RpcMessage::RecordPFSResponse", pos),
           _ => Ok(()),
         }
      })?
@@ -1931,6 +1963,20 @@ impl core::fmt::Debug for RpcMessageHeader<'_> {
         },
         RpcMessage::UserHeightRecordingStatusResponse => {
           if let Some(x) = self.message_as_user_height_recording_status_response() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::RecordPFSRequest => {
+          if let Some(x) = self.message_as_record_pfsrequest() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::RecordPFSResponse => {
+          if let Some(x) = self.message_as_record_pfsresponse() {
             ds.field("message", &x)
           } else {
             ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")

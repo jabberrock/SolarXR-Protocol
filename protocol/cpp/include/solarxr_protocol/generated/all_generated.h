@@ -488,6 +488,12 @@ struct CancelUserHeightCalibrationBuilder;
 struct UserHeightRecordingStatusResponse;
 struct UserHeightRecordingStatusResponseBuilder;
 
+struct RecordPFSRequest;
+struct RecordPFSRequestBuilder;
+
+struct RecordPFSResponse;
+struct RecordPFSResponseBuilder;
+
 }  // namespace rpc
 
 namespace pub_sub {
@@ -1374,11 +1380,13 @@ enum class RpcMessage : uint8_t {
   StartUserHeightCalibration = 76,
   CancelUserHeightCalibration = 77,
   UserHeightRecordingStatusResponse = 78,
+  RecordPFSRequest = 79,
+  RecordPFSResponse = 80,
   MIN = NONE,
-  MAX = UserHeightRecordingStatusResponse
+  MAX = RecordPFSResponse
 };
 
-inline const RpcMessage (&EnumValuesRpcMessage())[79] {
+inline const RpcMessage (&EnumValuesRpcMessage())[81] {
   static const RpcMessage values[] = {
     RpcMessage::NONE,
     RpcMessage::HeartbeatRequest,
@@ -1458,13 +1466,15 @@ inline const RpcMessage (&EnumValuesRpcMessage())[79] {
     RpcMessage::IgnoreTrackingChecklistStepRequest,
     RpcMessage::StartUserHeightCalibration,
     RpcMessage::CancelUserHeightCalibration,
-    RpcMessage::UserHeightRecordingStatusResponse
+    RpcMessage::UserHeightRecordingStatusResponse,
+    RpcMessage::RecordPFSRequest,
+    RpcMessage::RecordPFSResponse
   };
   return values;
 }
 
 inline const char * const *EnumNamesRpcMessage() {
-  static const char * const names[80] = {
+  static const char * const names[82] = {
     "NONE",
     "HeartbeatRequest",
     "HeartbeatResponse",
@@ -1544,13 +1554,15 @@ inline const char * const *EnumNamesRpcMessage() {
     "StartUserHeightCalibration",
     "CancelUserHeightCalibration",
     "UserHeightRecordingStatusResponse",
+    "RecordPFSRequest",
+    "RecordPFSResponse",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameRpcMessage(RpcMessage e) {
-  if (flatbuffers::IsOutRange(e, RpcMessage::NONE, RpcMessage::UserHeightRecordingStatusResponse)) return "";
+  if (flatbuffers::IsOutRange(e, RpcMessage::NONE, RpcMessage::RecordPFSResponse)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesRpcMessage()[index];
 }
@@ -1869,6 +1881,14 @@ template<> struct RpcMessageTraits<solarxr_protocol::rpc::CancelUserHeightCalibr
 
 template<> struct RpcMessageTraits<solarxr_protocol::rpc::UserHeightRecordingStatusResponse> {
   static const RpcMessage enum_value = RpcMessage::UserHeightRecordingStatusResponse;
+};
+
+template<> struct RpcMessageTraits<solarxr_protocol::rpc::RecordPFSRequest> {
+  static const RpcMessage enum_value = RpcMessage::RecordPFSRequest;
+};
+
+template<> struct RpcMessageTraits<solarxr_protocol::rpc::RecordPFSResponse> {
+  static const RpcMessage enum_value = RpcMessage::RecordPFSResponse;
 };
 
 bool VerifyRpcMessage(flatbuffers::Verifier &verifier, const void *obj, RpcMessage type);
@@ -6063,6 +6083,12 @@ struct RpcMessageHeader FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const solarxr_protocol::rpc::UserHeightRecordingStatusResponse *message_as_UserHeightRecordingStatusResponse() const {
     return message_type() == solarxr_protocol::rpc::RpcMessage::UserHeightRecordingStatusResponse ? static_cast<const solarxr_protocol::rpc::UserHeightRecordingStatusResponse *>(message()) : nullptr;
   }
+  const solarxr_protocol::rpc::RecordPFSRequest *message_as_RecordPFSRequest() const {
+    return message_type() == solarxr_protocol::rpc::RpcMessage::RecordPFSRequest ? static_cast<const solarxr_protocol::rpc::RecordPFSRequest *>(message()) : nullptr;
+  }
+  const solarxr_protocol::rpc::RecordPFSResponse *message_as_RecordPFSResponse() const {
+    return message_type() == solarxr_protocol::rpc::RpcMessage::RecordPFSResponse ? static_cast<const solarxr_protocol::rpc::RecordPFSResponse *>(message()) : nullptr;
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<solarxr_protocol::datatypes::TransactionId>(verifier, VT_TX_ID, 4) &&
@@ -6383,6 +6409,14 @@ template<> inline const solarxr_protocol::rpc::CancelUserHeightCalibration *RpcM
 
 template<> inline const solarxr_protocol::rpc::UserHeightRecordingStatusResponse *RpcMessageHeader::message_as<solarxr_protocol::rpc::UserHeightRecordingStatusResponse>() const {
   return message_as_UserHeightRecordingStatusResponse();
+}
+
+template<> inline const solarxr_protocol::rpc::RecordPFSRequest *RpcMessageHeader::message_as<solarxr_protocol::rpc::RecordPFSRequest>() const {
+  return message_as_RecordPFSRequest();
+}
+
+template<> inline const solarxr_protocol::rpc::RecordPFSResponse *RpcMessageHeader::message_as<solarxr_protocol::rpc::RecordPFSResponse>() const {
+  return message_as_RecordPFSResponse();
 }
 
 struct RpcMessageHeaderBuilder {
@@ -13417,6 +13451,108 @@ inline flatbuffers::Offset<UserHeightRecordingStatusResponse> CreateUserHeightRe
   return builder_.Finish();
 }
 
+struct RecordPFSRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef RecordPFSRequestBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_DURATION_SEC = 4,
+    VT_INTERVAL_SEC = 6
+  };
+  float duration_sec() const {
+    return GetField<float>(VT_DURATION_SEC, 0.0f);
+  }
+  float interval_sec() const {
+    return GetField<float>(VT_INTERVAL_SEC, 0.0f);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<float>(verifier, VT_DURATION_SEC, 4) &&
+           VerifyField<float>(verifier, VT_INTERVAL_SEC, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct RecordPFSRequestBuilder {
+  typedef RecordPFSRequest Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_duration_sec(float duration_sec) {
+    fbb_.AddElement<float>(RecordPFSRequest::VT_DURATION_SEC, duration_sec, 0.0f);
+  }
+  void add_interval_sec(float interval_sec) {
+    fbb_.AddElement<float>(RecordPFSRequest::VT_INTERVAL_SEC, interval_sec, 0.0f);
+  }
+  explicit RecordPFSRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<RecordPFSRequest> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<RecordPFSRequest>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<RecordPFSRequest> CreateRecordPFSRequest(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    float duration_sec = 0.0f,
+    float interval_sec = 0.0f) {
+  RecordPFSRequestBuilder builder_(_fbb);
+  builder_.add_interval_sec(interval_sec);
+  builder_.add_duration_sec(duration_sec);
+  return builder_.Finish();
+}
+
+struct RecordPFSResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef RecordPFSResponseBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_DATA = 4
+  };
+  const flatbuffers::Vector<uint8_t> *data() const {
+    return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_DATA);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_DATA) &&
+           verifier.VerifyVector(data()) &&
+           verifier.EndTable();
+  }
+};
+
+struct RecordPFSResponseBuilder {
+  typedef RecordPFSResponse Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_data(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> data) {
+    fbb_.AddOffset(RecordPFSResponse::VT_DATA, data);
+  }
+  explicit RecordPFSResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<RecordPFSResponse> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<RecordPFSResponse>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<RecordPFSResponse> CreateRecordPFSResponse(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> data = 0) {
+  RecordPFSResponseBuilder builder_(_fbb);
+  builder_.add_data(data);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<RecordPFSResponse> CreateRecordPFSResponseDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<uint8_t> *data = nullptr) {
+  auto data__ = data ? _fbb.CreateVector<uint8_t>(*data) : 0;
+  return solarxr_protocol::rpc::CreateRecordPFSResponse(
+      _fbb,
+      data__);
+}
+
 }  // namespace rpc
 
 namespace pub_sub {
@@ -14460,6 +14596,14 @@ inline bool VerifyRpcMessage(flatbuffers::Verifier &verifier, const void *obj, R
     }
     case RpcMessage::UserHeightRecordingStatusResponse: {
       auto ptr = reinterpret_cast<const solarxr_protocol::rpc::UserHeightRecordingStatusResponse *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case RpcMessage::RecordPFSRequest: {
+      auto ptr = reinterpret_cast<const solarxr_protocol::rpc::RecordPFSRequest *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case RpcMessage::RecordPFSResponse: {
+      auto ptr = reinterpret_cast<const solarxr_protocol::rpc::RecordPFSResponse *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

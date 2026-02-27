@@ -95,7 +95,9 @@ union RpcMessage {
     IgnoreTrackingChecklistStepRequest,
     StartUserHeightCalibration,
     CancelUserHeightCalibration,
-    UserHeightRecordingStatusResponse
+    UserHeightRecordingStatusResponse,
+    RecordPFSRequest,
+    RecordPFSResponse,
 }
 
 table RpcMessageHeader {
@@ -1069,4 +1071,13 @@ enum UserHeightCalibrationStatus: uint8 {
 table UserHeightRecordingStatusResponse {
     hmdHeight: float;
     status: UserHeightCalibrationStatus;
+}
+
+table RecordPFSRequest {
+    duration_sec: float32;
+    interval_sec: float32;
+}
+
+table RecordPFSResponse {
+    data: [ubyte];
 }
