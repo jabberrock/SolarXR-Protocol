@@ -102,7 +102,12 @@ union RpcMessage {
     InstalledInfoRequest,
     InstalledInfoResponse,
     OpenUriRequest,
-    OpenUriResponse
+    OpenUriResponse,
+    ConnectToVideoCalibrationRequest,
+    ConnectToVideoCalibrationResponse,
+    StartVideoCalibrationRequest,
+    VideoCalibrationProgress,
+    VideoCalibrationError,
 }
 
 enum KeybindId: uint8 {
@@ -1140,4 +1145,72 @@ enum UserHeightCalibrationStatus: uint8 {
 table UserHeightRecordingStatusResponse {
     hmdHeight: float;
     status: UserHeightCalibrationStatus;
+}
+
+table ConnectToVideoCalibrationRequest {
+    offer_sdp: string;
+}
+
+table ConnectToVideoCalibrationResponse {
+    answer_sdp: string;
+}
+
+enum VideoCalibrationProcess: uint8 {
+    ALIGN_CAMERA = 0,
+    ALIGN_TRACKERS = 1,
+    OPTIMIZE_BODY_PROPORTIONS = 2,
+}
+
+table StartVideoCalibrationRequest {
+    process: VideoCalibrationProcess;
+}
+
+enum VideoCalibrationStatus: uint8 {
+    NOT_STARTED = 0,
+    CONNECTING_TO_SERVER = 1,
+    CONNECTING_TO_WEBCAM = 2,
+    WAITING_FOR_USER_START = 3,
+    SOLVING_CAMERA_EXTRINSIC = 4,
+    CAPTURING_FORWARD_POSE = 5,
+    CAPTURING_LEANING_FORWARD_POSE = 6,
+    ALIGNING_UPPER_BODY_TRACKERS = 7,
+    ALIGNING_REMAINING_TRACKERS = 8,
+    OPTIMIZING_BODY_PROPORTIONS = 9,
+    COMPLETE = 10,
+}
+
+table VideoCalibrationCamera {
+    world_to_camera: solarxr_protocol.datatypes.math.Quat;
+    world_origin_in_camera: solarxr_protocol.datatypes.math.Vec3f;
+    fx: float32;
+    fy: float32;
+    tx: float32;
+    ty: float32;
+    width: int;
+    height: int;
+}
+
+table VideoCalibrationTrackerStatus {
+    body_part: solarxr_protocol.datatypes.BodyPart;
+    aligned: bool;
+}
+
+table VideoCalibrationProgress {
+    status: VideoCalibrationStatus;
+    camera: VideoCalibrationCamera;
+    trackers: [VideoCalibrationTrackerStatus];
+}
+
+table VideoCalibrationMissingTrackers {
+    missing_trackers: [solarxr_protocol.datatypes.BodyPart];
+}
+
+table VideoCalibrationForwardAndLeaningForwardNotAligned {
+    yaw_difference: float32;
+}
+
+table VideoCalibrationError {
+    missing_positional_trackers: VideoCalibrationMissingTrackers;
+    missing_required_imu_trackers: VideoCalibrationMissingTrackers;
+    forward_and_leaning_forward_not_aligned: VideoCalibrationForwardAndLeaningForwardNotAligned;
 }

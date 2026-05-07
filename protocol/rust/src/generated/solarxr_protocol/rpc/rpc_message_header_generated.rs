@@ -1344,6 +1344,81 @@ impl<'a> RpcMessageHeader<'a> {
     }
   }
 
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_connect_to_video_calibration_request(&self) -> Option<ConnectToVideoCalibrationRequest<'a>> {
+    if self.message_type() == RpcMessage::ConnectToVideoCalibrationRequest {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { ConnectToVideoCalibrationRequest::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_connect_to_video_calibration_response(&self) -> Option<ConnectToVideoCalibrationResponse<'a>> {
+    if self.message_type() == RpcMessage::ConnectToVideoCalibrationResponse {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { ConnectToVideoCalibrationResponse::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_start_video_calibration_request(&self) -> Option<StartVideoCalibrationRequest<'a>> {
+    if self.message_type() == RpcMessage::StartVideoCalibrationRequest {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { StartVideoCalibrationRequest::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_video_calibration_progress(&self) -> Option<VideoCalibrationProgress<'a>> {
+    if self.message_type() == RpcMessage::VideoCalibrationProgress {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { VideoCalibrationProgress::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_video_calibration_error(&self) -> Option<VideoCalibrationError<'a>> {
+    if self.message_type() == RpcMessage::VideoCalibrationError {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { VideoCalibrationError::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
 }
 
 impl flatbuffers::Verifiable for RpcMessageHeader<'_> {
@@ -1441,6 +1516,11 @@ impl flatbuffers::Verifiable for RpcMessageHeader<'_> {
           RpcMessage::InstalledInfoResponse => v.verify_union_variant::<flatbuffers::ForwardsUOffset<InstalledInfoResponse>>("RpcMessage::InstalledInfoResponse", pos),
           RpcMessage::OpenUriRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<OpenUriRequest>>("RpcMessage::OpenUriRequest", pos),
           RpcMessage::OpenUriResponse => v.verify_union_variant::<flatbuffers::ForwardsUOffset<OpenUriResponse>>("RpcMessage::OpenUriResponse", pos),
+          RpcMessage::ConnectToVideoCalibrationRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<ConnectToVideoCalibrationRequest>>("RpcMessage::ConnectToVideoCalibrationRequest", pos),
+          RpcMessage::ConnectToVideoCalibrationResponse => v.verify_union_variant::<flatbuffers::ForwardsUOffset<ConnectToVideoCalibrationResponse>>("RpcMessage::ConnectToVideoCalibrationResponse", pos),
+          RpcMessage::StartVideoCalibrationRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<StartVideoCalibrationRequest>>("RpcMessage::StartVideoCalibrationRequest", pos),
+          RpcMessage::VideoCalibrationProgress => v.verify_union_variant::<flatbuffers::ForwardsUOffset<VideoCalibrationProgress>>("RpcMessage::VideoCalibrationProgress", pos),
+          RpcMessage::VideoCalibrationError => v.verify_union_variant::<flatbuffers::ForwardsUOffset<VideoCalibrationError>>("RpcMessage::VideoCalibrationError", pos),
           _ => Ok(()),
         }
      })?
@@ -2092,6 +2172,41 @@ impl core::fmt::Debug for RpcMessageHeader<'_> {
         },
         RpcMessage::OpenUriResponse => {
           if let Some(x) = self.message_as_open_uri_response() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::ConnectToVideoCalibrationRequest => {
+          if let Some(x) = self.message_as_connect_to_video_calibration_request() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::ConnectToVideoCalibrationResponse => {
+          if let Some(x) = self.message_as_connect_to_video_calibration_response() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::StartVideoCalibrationRequest => {
+          if let Some(x) = self.message_as_start_video_calibration_request() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::VideoCalibrationProgress => {
+          if let Some(x) = self.message_as_video_calibration_progress() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::VideoCalibrationError => {
+          if let Some(x) = self.message_as_video_calibration_error() {
             ds.field("message", &x)
           } else {
             ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")

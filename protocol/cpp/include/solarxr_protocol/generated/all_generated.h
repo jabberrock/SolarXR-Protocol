@@ -518,6 +518,33 @@ struct CancelUserHeightCalibrationBuilder;
 struct UserHeightRecordingStatusResponse;
 struct UserHeightRecordingStatusResponseBuilder;
 
+struct ConnectToVideoCalibrationRequest;
+struct ConnectToVideoCalibrationRequestBuilder;
+
+struct ConnectToVideoCalibrationResponse;
+struct ConnectToVideoCalibrationResponseBuilder;
+
+struct StartVideoCalibrationRequest;
+struct StartVideoCalibrationRequestBuilder;
+
+struct VideoCalibrationCamera;
+struct VideoCalibrationCameraBuilder;
+
+struct VideoCalibrationTrackerStatus;
+struct VideoCalibrationTrackerStatusBuilder;
+
+struct VideoCalibrationProgress;
+struct VideoCalibrationProgressBuilder;
+
+struct VideoCalibrationMissingTrackers;
+struct VideoCalibrationMissingTrackersBuilder;
+
+struct VideoCalibrationForwardAndLeaningForwardNotAligned;
+struct VideoCalibrationForwardAndLeaningForwardNotAlignedBuilder;
+
+struct VideoCalibrationError;
+struct VideoCalibrationErrorBuilder;
+
 }  // namespace rpc
 
 namespace pub_sub {
@@ -1414,11 +1441,16 @@ enum class RpcMessage : uint8_t {
   InstalledInfoResponse = 83,
   OpenUriRequest = 84,
   OpenUriResponse = 85,
+  ConnectToVideoCalibrationRequest = 86,
+  ConnectToVideoCalibrationResponse = 87,
+  StartVideoCalibrationRequest = 88,
+  VideoCalibrationProgress = 89,
+  VideoCalibrationError = 90,
   MIN = NONE,
-  MAX = OpenUriResponse
+  MAX = VideoCalibrationError
 };
 
-inline const RpcMessage (&EnumValuesRpcMessage())[86] {
+inline const RpcMessage (&EnumValuesRpcMessage())[91] {
   static const RpcMessage values[] = {
     RpcMessage::NONE,
     RpcMessage::HeartbeatRequest,
@@ -1505,13 +1537,18 @@ inline const RpcMessage (&EnumValuesRpcMessage())[86] {
     RpcMessage::InstalledInfoRequest,
     RpcMessage::InstalledInfoResponse,
     RpcMessage::OpenUriRequest,
-    RpcMessage::OpenUriResponse
+    RpcMessage::OpenUriResponse,
+    RpcMessage::ConnectToVideoCalibrationRequest,
+    RpcMessage::ConnectToVideoCalibrationResponse,
+    RpcMessage::StartVideoCalibrationRequest,
+    RpcMessage::VideoCalibrationProgress,
+    RpcMessage::VideoCalibrationError
   };
   return values;
 }
 
 inline const char * const *EnumNamesRpcMessage() {
-  static const char * const names[87] = {
+  static const char * const names[92] = {
     "NONE",
     "HeartbeatRequest",
     "HeartbeatResponse",
@@ -1598,13 +1635,18 @@ inline const char * const *EnumNamesRpcMessage() {
     "InstalledInfoResponse",
     "OpenUriRequest",
     "OpenUriResponse",
+    "ConnectToVideoCalibrationRequest",
+    "ConnectToVideoCalibrationResponse",
+    "StartVideoCalibrationRequest",
+    "VideoCalibrationProgress",
+    "VideoCalibrationError",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameRpcMessage(RpcMessage e) {
-  if (flatbuffers::IsOutRange(e, RpcMessage::NONE, RpcMessage::OpenUriResponse)) return "";
+  if (flatbuffers::IsOutRange(e, RpcMessage::NONE, RpcMessage::VideoCalibrationError)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesRpcMessage()[index];
 }
@@ -1951,6 +1993,26 @@ template<> struct RpcMessageTraits<solarxr_protocol::rpc::OpenUriRequest> {
 
 template<> struct RpcMessageTraits<solarxr_protocol::rpc::OpenUriResponse> {
   static const RpcMessage enum_value = RpcMessage::OpenUriResponse;
+};
+
+template<> struct RpcMessageTraits<solarxr_protocol::rpc::ConnectToVideoCalibrationRequest> {
+  static const RpcMessage enum_value = RpcMessage::ConnectToVideoCalibrationRequest;
+};
+
+template<> struct RpcMessageTraits<solarxr_protocol::rpc::ConnectToVideoCalibrationResponse> {
+  static const RpcMessage enum_value = RpcMessage::ConnectToVideoCalibrationResponse;
+};
+
+template<> struct RpcMessageTraits<solarxr_protocol::rpc::StartVideoCalibrationRequest> {
+  static const RpcMessage enum_value = RpcMessage::StartVideoCalibrationRequest;
+};
+
+template<> struct RpcMessageTraits<solarxr_protocol::rpc::VideoCalibrationProgress> {
+  static const RpcMessage enum_value = RpcMessage::VideoCalibrationProgress;
+};
+
+template<> struct RpcMessageTraits<solarxr_protocol::rpc::VideoCalibrationError> {
+  static const RpcMessage enum_value = RpcMessage::VideoCalibrationError;
 };
 
 bool VerifyRpcMessage(flatbuffers::Verifier &verifier, const void *obj, RpcMessage type);
@@ -2927,6 +2989,96 @@ inline const char *EnumNameUserHeightCalibrationStatus(UserHeightCalibrationStat
   if (flatbuffers::IsOutRange(e, UserHeightCalibrationStatus::NONE, UserHeightCalibrationStatus::ERROR_TIMEOUT)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesUserHeightCalibrationStatus()[index];
+}
+
+enum class VideoCalibrationProcess : uint8_t {
+  ALIGN_CAMERA = 0,
+  ALIGN_TRACKERS = 1,
+  OPTIMIZE_BODY_PROPORTIONS = 2,
+  MIN = ALIGN_CAMERA,
+  MAX = OPTIMIZE_BODY_PROPORTIONS
+};
+
+inline const VideoCalibrationProcess (&EnumValuesVideoCalibrationProcess())[3] {
+  static const VideoCalibrationProcess values[] = {
+    VideoCalibrationProcess::ALIGN_CAMERA,
+    VideoCalibrationProcess::ALIGN_TRACKERS,
+    VideoCalibrationProcess::OPTIMIZE_BODY_PROPORTIONS
+  };
+  return values;
+}
+
+inline const char * const *EnumNamesVideoCalibrationProcess() {
+  static const char * const names[4] = {
+    "ALIGN_CAMERA",
+    "ALIGN_TRACKERS",
+    "OPTIMIZE_BODY_PROPORTIONS",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameVideoCalibrationProcess(VideoCalibrationProcess e) {
+  if (flatbuffers::IsOutRange(e, VideoCalibrationProcess::ALIGN_CAMERA, VideoCalibrationProcess::OPTIMIZE_BODY_PROPORTIONS)) return "";
+  const size_t index = static_cast<size_t>(e);
+  return EnumNamesVideoCalibrationProcess()[index];
+}
+
+enum class VideoCalibrationStatus : uint8_t {
+  NOT_STARTED = 0,
+  CONNECTING_TO_SERVER = 1,
+  CONNECTING_TO_WEBCAM = 2,
+  WAITING_FOR_USER_START = 3,
+  SOLVING_CAMERA_EXTRINSIC = 4,
+  CAPTURING_FORWARD_POSE = 5,
+  CAPTURING_LEANING_FORWARD_POSE = 6,
+  ALIGNING_UPPER_BODY_TRACKERS = 7,
+  ALIGNING_REMAINING_TRACKERS = 8,
+  OPTIMIZING_BODY_PROPORTIONS = 9,
+  COMPLETE = 10,
+  MIN = NOT_STARTED,
+  MAX = COMPLETE
+};
+
+inline const VideoCalibrationStatus (&EnumValuesVideoCalibrationStatus())[11] {
+  static const VideoCalibrationStatus values[] = {
+    VideoCalibrationStatus::NOT_STARTED,
+    VideoCalibrationStatus::CONNECTING_TO_SERVER,
+    VideoCalibrationStatus::CONNECTING_TO_WEBCAM,
+    VideoCalibrationStatus::WAITING_FOR_USER_START,
+    VideoCalibrationStatus::SOLVING_CAMERA_EXTRINSIC,
+    VideoCalibrationStatus::CAPTURING_FORWARD_POSE,
+    VideoCalibrationStatus::CAPTURING_LEANING_FORWARD_POSE,
+    VideoCalibrationStatus::ALIGNING_UPPER_BODY_TRACKERS,
+    VideoCalibrationStatus::ALIGNING_REMAINING_TRACKERS,
+    VideoCalibrationStatus::OPTIMIZING_BODY_PROPORTIONS,
+    VideoCalibrationStatus::COMPLETE
+  };
+  return values;
+}
+
+inline const char * const *EnumNamesVideoCalibrationStatus() {
+  static const char * const names[12] = {
+    "NOT_STARTED",
+    "CONNECTING_TO_SERVER",
+    "CONNECTING_TO_WEBCAM",
+    "WAITING_FOR_USER_START",
+    "SOLVING_CAMERA_EXTRINSIC",
+    "CAPTURING_FORWARD_POSE",
+    "CAPTURING_LEANING_FORWARD_POSE",
+    "ALIGNING_UPPER_BODY_TRACKERS",
+    "ALIGNING_REMAINING_TRACKERS",
+    "OPTIMIZING_BODY_PROPORTIONS",
+    "COMPLETE",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameVideoCalibrationStatus(VideoCalibrationStatus e) {
+  if (flatbuffers::IsOutRange(e, VideoCalibrationStatus::NOT_STARTED, VideoCalibrationStatus::COMPLETE)) return "";
+  const size_t index = static_cast<size_t>(e);
+  return EnumNamesVideoCalibrationStatus()[index];
 }
 
 }  // namespace rpc
@@ -6517,6 +6669,21 @@ struct RpcMessageHeader FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const solarxr_protocol::rpc::OpenUriResponse *message_as_OpenUriResponse() const {
     return message_type() == solarxr_protocol::rpc::RpcMessage::OpenUriResponse ? static_cast<const solarxr_protocol::rpc::OpenUriResponse *>(message()) : nullptr;
   }
+  const solarxr_protocol::rpc::ConnectToVideoCalibrationRequest *message_as_ConnectToVideoCalibrationRequest() const {
+    return message_type() == solarxr_protocol::rpc::RpcMessage::ConnectToVideoCalibrationRequest ? static_cast<const solarxr_protocol::rpc::ConnectToVideoCalibrationRequest *>(message()) : nullptr;
+  }
+  const solarxr_protocol::rpc::ConnectToVideoCalibrationResponse *message_as_ConnectToVideoCalibrationResponse() const {
+    return message_type() == solarxr_protocol::rpc::RpcMessage::ConnectToVideoCalibrationResponse ? static_cast<const solarxr_protocol::rpc::ConnectToVideoCalibrationResponse *>(message()) : nullptr;
+  }
+  const solarxr_protocol::rpc::StartVideoCalibrationRequest *message_as_StartVideoCalibrationRequest() const {
+    return message_type() == solarxr_protocol::rpc::RpcMessage::StartVideoCalibrationRequest ? static_cast<const solarxr_protocol::rpc::StartVideoCalibrationRequest *>(message()) : nullptr;
+  }
+  const solarxr_protocol::rpc::VideoCalibrationProgress *message_as_VideoCalibrationProgress() const {
+    return message_type() == solarxr_protocol::rpc::RpcMessage::VideoCalibrationProgress ? static_cast<const solarxr_protocol::rpc::VideoCalibrationProgress *>(message()) : nullptr;
+  }
+  const solarxr_protocol::rpc::VideoCalibrationError *message_as_VideoCalibrationError() const {
+    return message_type() == solarxr_protocol::rpc::RpcMessage::VideoCalibrationError ? static_cast<const solarxr_protocol::rpc::VideoCalibrationError *>(message()) : nullptr;
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<solarxr_protocol::datatypes::TransactionId>(verifier, VT_TX_ID, 4) &&
@@ -6865,6 +7032,26 @@ template<> inline const solarxr_protocol::rpc::OpenUriRequest *RpcMessageHeader:
 
 template<> inline const solarxr_protocol::rpc::OpenUriResponse *RpcMessageHeader::message_as<solarxr_protocol::rpc::OpenUriResponse>() const {
   return message_as_OpenUriResponse();
+}
+
+template<> inline const solarxr_protocol::rpc::ConnectToVideoCalibrationRequest *RpcMessageHeader::message_as<solarxr_protocol::rpc::ConnectToVideoCalibrationRequest>() const {
+  return message_as_ConnectToVideoCalibrationRequest();
+}
+
+template<> inline const solarxr_protocol::rpc::ConnectToVideoCalibrationResponse *RpcMessageHeader::message_as<solarxr_protocol::rpc::ConnectToVideoCalibrationResponse>() const {
+  return message_as_ConnectToVideoCalibrationResponse();
+}
+
+template<> inline const solarxr_protocol::rpc::StartVideoCalibrationRequest *RpcMessageHeader::message_as<solarxr_protocol::rpc::StartVideoCalibrationRequest>() const {
+  return message_as_StartVideoCalibrationRequest();
+}
+
+template<> inline const solarxr_protocol::rpc::VideoCalibrationProgress *RpcMessageHeader::message_as<solarxr_protocol::rpc::VideoCalibrationProgress>() const {
+  return message_as_VideoCalibrationProgress();
+}
+
+template<> inline const solarxr_protocol::rpc::VideoCalibrationError *RpcMessageHeader::message_as<solarxr_protocol::rpc::VideoCalibrationError>() const {
+  return message_as_VideoCalibrationError();
 }
 
 struct RpcMessageHeaderBuilder {
@@ -14135,6 +14322,544 @@ inline flatbuffers::Offset<UserHeightRecordingStatusResponse> CreateUserHeightRe
   return builder_.Finish();
 }
 
+struct ConnectToVideoCalibrationRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ConnectToVideoCalibrationRequestBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OFFER_SDP = 4
+  };
+  const flatbuffers::String *offer_sdp() const {
+    return GetPointer<const flatbuffers::String *>(VT_OFFER_SDP);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_OFFER_SDP) &&
+           verifier.VerifyString(offer_sdp()) &&
+           verifier.EndTable();
+  }
+};
+
+struct ConnectToVideoCalibrationRequestBuilder {
+  typedef ConnectToVideoCalibrationRequest Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_offer_sdp(flatbuffers::Offset<flatbuffers::String> offer_sdp) {
+    fbb_.AddOffset(ConnectToVideoCalibrationRequest::VT_OFFER_SDP, offer_sdp);
+  }
+  explicit ConnectToVideoCalibrationRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<ConnectToVideoCalibrationRequest> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<ConnectToVideoCalibrationRequest>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<ConnectToVideoCalibrationRequest> CreateConnectToVideoCalibrationRequest(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> offer_sdp = 0) {
+  ConnectToVideoCalibrationRequestBuilder builder_(_fbb);
+  builder_.add_offer_sdp(offer_sdp);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<ConnectToVideoCalibrationRequest> CreateConnectToVideoCalibrationRequestDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const char *offer_sdp = nullptr) {
+  auto offer_sdp__ = offer_sdp ? _fbb.CreateString(offer_sdp) : 0;
+  return solarxr_protocol::rpc::CreateConnectToVideoCalibrationRequest(
+      _fbb,
+      offer_sdp__);
+}
+
+struct ConnectToVideoCalibrationResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ConnectToVideoCalibrationResponseBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_ANSWER_SDP = 4
+  };
+  const flatbuffers::String *answer_sdp() const {
+    return GetPointer<const flatbuffers::String *>(VT_ANSWER_SDP);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_ANSWER_SDP) &&
+           verifier.VerifyString(answer_sdp()) &&
+           verifier.EndTable();
+  }
+};
+
+struct ConnectToVideoCalibrationResponseBuilder {
+  typedef ConnectToVideoCalibrationResponse Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_answer_sdp(flatbuffers::Offset<flatbuffers::String> answer_sdp) {
+    fbb_.AddOffset(ConnectToVideoCalibrationResponse::VT_ANSWER_SDP, answer_sdp);
+  }
+  explicit ConnectToVideoCalibrationResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<ConnectToVideoCalibrationResponse> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<ConnectToVideoCalibrationResponse>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<ConnectToVideoCalibrationResponse> CreateConnectToVideoCalibrationResponse(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> answer_sdp = 0) {
+  ConnectToVideoCalibrationResponseBuilder builder_(_fbb);
+  builder_.add_answer_sdp(answer_sdp);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<ConnectToVideoCalibrationResponse> CreateConnectToVideoCalibrationResponseDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const char *answer_sdp = nullptr) {
+  auto answer_sdp__ = answer_sdp ? _fbb.CreateString(answer_sdp) : 0;
+  return solarxr_protocol::rpc::CreateConnectToVideoCalibrationResponse(
+      _fbb,
+      answer_sdp__);
+}
+
+struct StartVideoCalibrationRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef StartVideoCalibrationRequestBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_PROCESS = 4
+  };
+  solarxr_protocol::rpc::VideoCalibrationProcess process() const {
+    return static_cast<solarxr_protocol::rpc::VideoCalibrationProcess>(GetField<uint8_t>(VT_PROCESS, 0));
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint8_t>(verifier, VT_PROCESS, 1) &&
+           verifier.EndTable();
+  }
+};
+
+struct StartVideoCalibrationRequestBuilder {
+  typedef StartVideoCalibrationRequest Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_process(solarxr_protocol::rpc::VideoCalibrationProcess process) {
+    fbb_.AddElement<uint8_t>(StartVideoCalibrationRequest::VT_PROCESS, static_cast<uint8_t>(process), 0);
+  }
+  explicit StartVideoCalibrationRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<StartVideoCalibrationRequest> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<StartVideoCalibrationRequest>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<StartVideoCalibrationRequest> CreateStartVideoCalibrationRequest(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    solarxr_protocol::rpc::VideoCalibrationProcess process = solarxr_protocol::rpc::VideoCalibrationProcess::ALIGN_CAMERA) {
+  StartVideoCalibrationRequestBuilder builder_(_fbb);
+  builder_.add_process(process);
+  return builder_.Finish();
+}
+
+struct VideoCalibrationCamera FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef VideoCalibrationCameraBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_WORLD_TO_CAMERA = 4,
+    VT_WORLD_ORIGIN_IN_CAMERA = 6,
+    VT_FX = 8,
+    VT_FY = 10,
+    VT_TX = 12,
+    VT_TY = 14,
+    VT_WIDTH = 16,
+    VT_HEIGHT = 18
+  };
+  const solarxr_protocol::datatypes::math::Quat *world_to_camera() const {
+    return GetStruct<const solarxr_protocol::datatypes::math::Quat *>(VT_WORLD_TO_CAMERA);
+  }
+  const solarxr_protocol::datatypes::math::Vec3f *world_origin_in_camera() const {
+    return GetStruct<const solarxr_protocol::datatypes::math::Vec3f *>(VT_WORLD_ORIGIN_IN_CAMERA);
+  }
+  float fx() const {
+    return GetField<float>(VT_FX, 0.0f);
+  }
+  float fy() const {
+    return GetField<float>(VT_FY, 0.0f);
+  }
+  float tx() const {
+    return GetField<float>(VT_TX, 0.0f);
+  }
+  float ty() const {
+    return GetField<float>(VT_TY, 0.0f);
+  }
+  int32_t width() const {
+    return GetField<int32_t>(VT_WIDTH, 0);
+  }
+  int32_t height() const {
+    return GetField<int32_t>(VT_HEIGHT, 0);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<solarxr_protocol::datatypes::math::Quat>(verifier, VT_WORLD_TO_CAMERA, 4) &&
+           VerifyField<solarxr_protocol::datatypes::math::Vec3f>(verifier, VT_WORLD_ORIGIN_IN_CAMERA, 4) &&
+           VerifyField<float>(verifier, VT_FX, 4) &&
+           VerifyField<float>(verifier, VT_FY, 4) &&
+           VerifyField<float>(verifier, VT_TX, 4) &&
+           VerifyField<float>(verifier, VT_TY, 4) &&
+           VerifyField<int32_t>(verifier, VT_WIDTH, 4) &&
+           VerifyField<int32_t>(verifier, VT_HEIGHT, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct VideoCalibrationCameraBuilder {
+  typedef VideoCalibrationCamera Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_world_to_camera(const solarxr_protocol::datatypes::math::Quat *world_to_camera) {
+    fbb_.AddStruct(VideoCalibrationCamera::VT_WORLD_TO_CAMERA, world_to_camera);
+  }
+  void add_world_origin_in_camera(const solarxr_protocol::datatypes::math::Vec3f *world_origin_in_camera) {
+    fbb_.AddStruct(VideoCalibrationCamera::VT_WORLD_ORIGIN_IN_CAMERA, world_origin_in_camera);
+  }
+  void add_fx(float fx) {
+    fbb_.AddElement<float>(VideoCalibrationCamera::VT_FX, fx, 0.0f);
+  }
+  void add_fy(float fy) {
+    fbb_.AddElement<float>(VideoCalibrationCamera::VT_FY, fy, 0.0f);
+  }
+  void add_tx(float tx) {
+    fbb_.AddElement<float>(VideoCalibrationCamera::VT_TX, tx, 0.0f);
+  }
+  void add_ty(float ty) {
+    fbb_.AddElement<float>(VideoCalibrationCamera::VT_TY, ty, 0.0f);
+  }
+  void add_width(int32_t width) {
+    fbb_.AddElement<int32_t>(VideoCalibrationCamera::VT_WIDTH, width, 0);
+  }
+  void add_height(int32_t height) {
+    fbb_.AddElement<int32_t>(VideoCalibrationCamera::VT_HEIGHT, height, 0);
+  }
+  explicit VideoCalibrationCameraBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<VideoCalibrationCamera> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<VideoCalibrationCamera>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<VideoCalibrationCamera> CreateVideoCalibrationCamera(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const solarxr_protocol::datatypes::math::Quat *world_to_camera = nullptr,
+    const solarxr_protocol::datatypes::math::Vec3f *world_origin_in_camera = nullptr,
+    float fx = 0.0f,
+    float fy = 0.0f,
+    float tx = 0.0f,
+    float ty = 0.0f,
+    int32_t width = 0,
+    int32_t height = 0) {
+  VideoCalibrationCameraBuilder builder_(_fbb);
+  builder_.add_height(height);
+  builder_.add_width(width);
+  builder_.add_ty(ty);
+  builder_.add_tx(tx);
+  builder_.add_fy(fy);
+  builder_.add_fx(fx);
+  builder_.add_world_origin_in_camera(world_origin_in_camera);
+  builder_.add_world_to_camera(world_to_camera);
+  return builder_.Finish();
+}
+
+struct VideoCalibrationTrackerStatus FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef VideoCalibrationTrackerStatusBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_BODY_PART = 4,
+    VT_ALIGNED = 6
+  };
+  solarxr_protocol::datatypes::BodyPart body_part() const {
+    return static_cast<solarxr_protocol::datatypes::BodyPart>(GetField<uint8_t>(VT_BODY_PART, 0));
+  }
+  bool aligned() const {
+    return GetField<uint8_t>(VT_ALIGNED, 0) != 0;
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint8_t>(verifier, VT_BODY_PART, 1) &&
+           VerifyField<uint8_t>(verifier, VT_ALIGNED, 1) &&
+           verifier.EndTable();
+  }
+};
+
+struct VideoCalibrationTrackerStatusBuilder {
+  typedef VideoCalibrationTrackerStatus Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_body_part(solarxr_protocol::datatypes::BodyPart body_part) {
+    fbb_.AddElement<uint8_t>(VideoCalibrationTrackerStatus::VT_BODY_PART, static_cast<uint8_t>(body_part), 0);
+  }
+  void add_aligned(bool aligned) {
+    fbb_.AddElement<uint8_t>(VideoCalibrationTrackerStatus::VT_ALIGNED, static_cast<uint8_t>(aligned), 0);
+  }
+  explicit VideoCalibrationTrackerStatusBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<VideoCalibrationTrackerStatus> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<VideoCalibrationTrackerStatus>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<VideoCalibrationTrackerStatus> CreateVideoCalibrationTrackerStatus(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    solarxr_protocol::datatypes::BodyPart body_part = solarxr_protocol::datatypes::BodyPart::NONE,
+    bool aligned = false) {
+  VideoCalibrationTrackerStatusBuilder builder_(_fbb);
+  builder_.add_aligned(aligned);
+  builder_.add_body_part(body_part);
+  return builder_.Finish();
+}
+
+struct VideoCalibrationProgress FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef VideoCalibrationProgressBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_STATUS = 4,
+    VT_CAMERA = 6,
+    VT_TRACKERS = 8
+  };
+  solarxr_protocol::rpc::VideoCalibrationStatus status() const {
+    return static_cast<solarxr_protocol::rpc::VideoCalibrationStatus>(GetField<uint8_t>(VT_STATUS, 0));
+  }
+  const solarxr_protocol::rpc::VideoCalibrationCamera *camera() const {
+    return GetPointer<const solarxr_protocol::rpc::VideoCalibrationCamera *>(VT_CAMERA);
+  }
+  const flatbuffers::Vector<flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationTrackerStatus>> *trackers() const {
+    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationTrackerStatus>> *>(VT_TRACKERS);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint8_t>(verifier, VT_STATUS, 1) &&
+           VerifyOffset(verifier, VT_CAMERA) &&
+           verifier.VerifyTable(camera()) &&
+           VerifyOffset(verifier, VT_TRACKERS) &&
+           verifier.VerifyVector(trackers()) &&
+           verifier.VerifyVectorOfTables(trackers()) &&
+           verifier.EndTable();
+  }
+};
+
+struct VideoCalibrationProgressBuilder {
+  typedef VideoCalibrationProgress Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_status(solarxr_protocol::rpc::VideoCalibrationStatus status) {
+    fbb_.AddElement<uint8_t>(VideoCalibrationProgress::VT_STATUS, static_cast<uint8_t>(status), 0);
+  }
+  void add_camera(flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationCamera> camera) {
+    fbb_.AddOffset(VideoCalibrationProgress::VT_CAMERA, camera);
+  }
+  void add_trackers(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationTrackerStatus>>> trackers) {
+    fbb_.AddOffset(VideoCalibrationProgress::VT_TRACKERS, trackers);
+  }
+  explicit VideoCalibrationProgressBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<VideoCalibrationProgress> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<VideoCalibrationProgress>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<VideoCalibrationProgress> CreateVideoCalibrationProgress(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    solarxr_protocol::rpc::VideoCalibrationStatus status = solarxr_protocol::rpc::VideoCalibrationStatus::NOT_STARTED,
+    flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationCamera> camera = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationTrackerStatus>>> trackers = 0) {
+  VideoCalibrationProgressBuilder builder_(_fbb);
+  builder_.add_trackers(trackers);
+  builder_.add_camera(camera);
+  builder_.add_status(status);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<VideoCalibrationProgress> CreateVideoCalibrationProgressDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    solarxr_protocol::rpc::VideoCalibrationStatus status = solarxr_protocol::rpc::VideoCalibrationStatus::NOT_STARTED,
+    flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationCamera> camera = 0,
+    const std::vector<flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationTrackerStatus>> *trackers = nullptr) {
+  auto trackers__ = trackers ? _fbb.CreateVector<flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationTrackerStatus>>(*trackers) : 0;
+  return solarxr_protocol::rpc::CreateVideoCalibrationProgress(
+      _fbb,
+      status,
+      camera,
+      trackers__);
+}
+
+struct VideoCalibrationMissingTrackers FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef VideoCalibrationMissingTrackersBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_MISSING_TRACKERS = 4
+  };
+  const flatbuffers::Vector<solarxr_protocol::datatypes::BodyPart> *missing_trackers() const {
+    return GetPointer<const flatbuffers::Vector<solarxr_protocol::datatypes::BodyPart> *>(VT_MISSING_TRACKERS);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_MISSING_TRACKERS) &&
+           verifier.VerifyVector(missing_trackers()) &&
+           verifier.EndTable();
+  }
+};
+
+struct VideoCalibrationMissingTrackersBuilder {
+  typedef VideoCalibrationMissingTrackers Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_missing_trackers(flatbuffers::Offset<flatbuffers::Vector<solarxr_protocol::datatypes::BodyPart>> missing_trackers) {
+    fbb_.AddOffset(VideoCalibrationMissingTrackers::VT_MISSING_TRACKERS, missing_trackers);
+  }
+  explicit VideoCalibrationMissingTrackersBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<VideoCalibrationMissingTrackers> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<VideoCalibrationMissingTrackers>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<VideoCalibrationMissingTrackers> CreateVideoCalibrationMissingTrackers(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::Vector<solarxr_protocol::datatypes::BodyPart>> missing_trackers = 0) {
+  VideoCalibrationMissingTrackersBuilder builder_(_fbb);
+  builder_.add_missing_trackers(missing_trackers);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<VideoCalibrationMissingTrackers> CreateVideoCalibrationMissingTrackersDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<solarxr_protocol::datatypes::BodyPart> *missing_trackers = nullptr) {
+  auto missing_trackers__ = missing_trackers ? _fbb.CreateVector<solarxr_protocol::datatypes::BodyPart>(*missing_trackers) : 0;
+  return solarxr_protocol::rpc::CreateVideoCalibrationMissingTrackers(
+      _fbb,
+      missing_trackers__);
+}
+
+struct VideoCalibrationForwardAndLeaningForwardNotAligned FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef VideoCalibrationForwardAndLeaningForwardNotAlignedBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_YAW_DIFFERENCE = 4
+  };
+  float yaw_difference() const {
+    return GetField<float>(VT_YAW_DIFFERENCE, 0.0f);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<float>(verifier, VT_YAW_DIFFERENCE, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct VideoCalibrationForwardAndLeaningForwardNotAlignedBuilder {
+  typedef VideoCalibrationForwardAndLeaningForwardNotAligned Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_yaw_difference(float yaw_difference) {
+    fbb_.AddElement<float>(VideoCalibrationForwardAndLeaningForwardNotAligned::VT_YAW_DIFFERENCE, yaw_difference, 0.0f);
+  }
+  explicit VideoCalibrationForwardAndLeaningForwardNotAlignedBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<VideoCalibrationForwardAndLeaningForwardNotAligned> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<VideoCalibrationForwardAndLeaningForwardNotAligned>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<VideoCalibrationForwardAndLeaningForwardNotAligned> CreateVideoCalibrationForwardAndLeaningForwardNotAligned(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    float yaw_difference = 0.0f) {
+  VideoCalibrationForwardAndLeaningForwardNotAlignedBuilder builder_(_fbb);
+  builder_.add_yaw_difference(yaw_difference);
+  return builder_.Finish();
+}
+
+struct VideoCalibrationError FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef VideoCalibrationErrorBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_MISSING_POSITIONAL_TRACKERS = 4,
+    VT_MISSING_REQUIRED_IMU_TRACKERS = 6,
+    VT_FORWARD_AND_LEANING_FORWARD_NOT_ALIGNED = 8
+  };
+  const solarxr_protocol::rpc::VideoCalibrationMissingTrackers *missing_positional_trackers() const {
+    return GetPointer<const solarxr_protocol::rpc::VideoCalibrationMissingTrackers *>(VT_MISSING_POSITIONAL_TRACKERS);
+  }
+  const solarxr_protocol::rpc::VideoCalibrationMissingTrackers *missing_required_imu_trackers() const {
+    return GetPointer<const solarxr_protocol::rpc::VideoCalibrationMissingTrackers *>(VT_MISSING_REQUIRED_IMU_TRACKERS);
+  }
+  const solarxr_protocol::rpc::VideoCalibrationForwardAndLeaningForwardNotAligned *forward_and_leaning_forward_not_aligned() const {
+    return GetPointer<const solarxr_protocol::rpc::VideoCalibrationForwardAndLeaningForwardNotAligned *>(VT_FORWARD_AND_LEANING_FORWARD_NOT_ALIGNED);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_MISSING_POSITIONAL_TRACKERS) &&
+           verifier.VerifyTable(missing_positional_trackers()) &&
+           VerifyOffset(verifier, VT_MISSING_REQUIRED_IMU_TRACKERS) &&
+           verifier.VerifyTable(missing_required_imu_trackers()) &&
+           VerifyOffset(verifier, VT_FORWARD_AND_LEANING_FORWARD_NOT_ALIGNED) &&
+           verifier.VerifyTable(forward_and_leaning_forward_not_aligned()) &&
+           verifier.EndTable();
+  }
+};
+
+struct VideoCalibrationErrorBuilder {
+  typedef VideoCalibrationError Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_missing_positional_trackers(flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationMissingTrackers> missing_positional_trackers) {
+    fbb_.AddOffset(VideoCalibrationError::VT_MISSING_POSITIONAL_TRACKERS, missing_positional_trackers);
+  }
+  void add_missing_required_imu_trackers(flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationMissingTrackers> missing_required_imu_trackers) {
+    fbb_.AddOffset(VideoCalibrationError::VT_MISSING_REQUIRED_IMU_TRACKERS, missing_required_imu_trackers);
+  }
+  void add_forward_and_leaning_forward_not_aligned(flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationForwardAndLeaningForwardNotAligned> forward_and_leaning_forward_not_aligned) {
+    fbb_.AddOffset(VideoCalibrationError::VT_FORWARD_AND_LEANING_FORWARD_NOT_ALIGNED, forward_and_leaning_forward_not_aligned);
+  }
+  explicit VideoCalibrationErrorBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<VideoCalibrationError> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<VideoCalibrationError>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<VideoCalibrationError> CreateVideoCalibrationError(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationMissingTrackers> missing_positional_trackers = 0,
+    flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationMissingTrackers> missing_required_imu_trackers = 0,
+    flatbuffers::Offset<solarxr_protocol::rpc::VideoCalibrationForwardAndLeaningForwardNotAligned> forward_and_leaning_forward_not_aligned = 0) {
+  VideoCalibrationErrorBuilder builder_(_fbb);
+  builder_.add_forward_and_leaning_forward_not_aligned(forward_and_leaning_forward_not_aligned);
+  builder_.add_missing_required_imu_trackers(missing_required_imu_trackers);
+  builder_.add_missing_positional_trackers(missing_positional_trackers);
+  return builder_.Finish();
+}
+
 }  // namespace rpc
 
 namespace pub_sub {
@@ -15206,6 +15931,26 @@ inline bool VerifyRpcMessage(flatbuffers::Verifier &verifier, const void *obj, R
     }
     case RpcMessage::OpenUriResponse: {
       auto ptr = reinterpret_cast<const solarxr_protocol::rpc::OpenUriResponse *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case RpcMessage::ConnectToVideoCalibrationRequest: {
+      auto ptr = reinterpret_cast<const solarxr_protocol::rpc::ConnectToVideoCalibrationRequest *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case RpcMessage::ConnectToVideoCalibrationResponse: {
+      auto ptr = reinterpret_cast<const solarxr_protocol::rpc::ConnectToVideoCalibrationResponse *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case RpcMessage::StartVideoCalibrationRequest: {
+      auto ptr = reinterpret_cast<const solarxr_protocol::rpc::StartVideoCalibrationRequest *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case RpcMessage::VideoCalibrationProgress: {
+      auto ptr = reinterpret_cast<const solarxr_protocol::rpc::VideoCalibrationProgress *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case RpcMessage::VideoCalibrationError: {
+      auto ptr = reinterpret_cast<const solarxr_protocol::rpc::VideoCalibrationError *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

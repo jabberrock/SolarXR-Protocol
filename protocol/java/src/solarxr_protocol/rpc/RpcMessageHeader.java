@@ -392,6 +392,26 @@ public final class RpcMessageHeader extends Table {
         _oMessageValue = message(new solarxr_protocol.rpc.OpenUriResponse());
         _oMessage.setValue(_oMessageValue != null ? ((solarxr_protocol.rpc.OpenUriResponse) _oMessageValue).unpack() : null);
         break;
+      case solarxr_protocol.rpc.RpcMessage.ConnectToVideoCalibrationRequest:
+        _oMessageValue = message(new solarxr_protocol.rpc.ConnectToVideoCalibrationRequest());
+        _oMessage.setValue(_oMessageValue != null ? ((solarxr_protocol.rpc.ConnectToVideoCalibrationRequest) _oMessageValue).unpack() : null);
+        break;
+      case solarxr_protocol.rpc.RpcMessage.ConnectToVideoCalibrationResponse:
+        _oMessageValue = message(new solarxr_protocol.rpc.ConnectToVideoCalibrationResponse());
+        _oMessage.setValue(_oMessageValue != null ? ((solarxr_protocol.rpc.ConnectToVideoCalibrationResponse) _oMessageValue).unpack() : null);
+        break;
+      case solarxr_protocol.rpc.RpcMessage.StartVideoCalibrationRequest:
+        _oMessageValue = message(new solarxr_protocol.rpc.StartVideoCalibrationRequest());
+        _oMessage.setValue(_oMessageValue != null ? ((solarxr_protocol.rpc.StartVideoCalibrationRequest) _oMessageValue).unpack() : null);
+        break;
+      case solarxr_protocol.rpc.RpcMessage.VideoCalibrationProgress:
+        _oMessageValue = message(new solarxr_protocol.rpc.VideoCalibrationProgress());
+        _oMessage.setValue(_oMessageValue != null ? ((solarxr_protocol.rpc.VideoCalibrationProgress) _oMessageValue).unpack() : null);
+        break;
+      case solarxr_protocol.rpc.RpcMessage.VideoCalibrationError:
+        _oMessageValue = message(new solarxr_protocol.rpc.VideoCalibrationError());
+        _oMessage.setValue(_oMessageValue != null ? ((solarxr_protocol.rpc.VideoCalibrationError) _oMessageValue).unpack() : null);
+        break;
       default: break;
     }
     _o.setMessage(_oMessage);

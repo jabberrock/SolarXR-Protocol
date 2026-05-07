@@ -106,6 +106,11 @@ public class RpcMessageUnion {
   public solarxr_protocol.rpc.InstalledInfoResponseT asInstalledInfoResponse() { return (solarxr_protocol.rpc.InstalledInfoResponseT) value; }
   public solarxr_protocol.rpc.OpenUriRequestT asOpenUriRequest() { return (solarxr_protocol.rpc.OpenUriRequestT) value; }
   public solarxr_protocol.rpc.OpenUriResponseT asOpenUriResponse() { return (solarxr_protocol.rpc.OpenUriResponseT) value; }
+  public solarxr_protocol.rpc.ConnectToVideoCalibrationRequestT asConnectToVideoCalibrationRequest() { return (solarxr_protocol.rpc.ConnectToVideoCalibrationRequestT) value; }
+  public solarxr_protocol.rpc.ConnectToVideoCalibrationResponseT asConnectToVideoCalibrationResponse() { return (solarxr_protocol.rpc.ConnectToVideoCalibrationResponseT) value; }
+  public solarxr_protocol.rpc.StartVideoCalibrationRequestT asStartVideoCalibrationRequest() { return (solarxr_protocol.rpc.StartVideoCalibrationRequestT) value; }
+  public solarxr_protocol.rpc.VideoCalibrationProgressT asVideoCalibrationProgress() { return (solarxr_protocol.rpc.VideoCalibrationProgressT) value; }
+  public solarxr_protocol.rpc.VideoCalibrationErrorT asVideoCalibrationError() { return (solarxr_protocol.rpc.VideoCalibrationErrorT) value; }
 
   public static int pack(FlatBufferBuilder builder, RpcMessageUnion _o) {
     switch (_o.type) {
@@ -194,6 +199,11 @@ public class RpcMessageUnion {
       case RpcMessage.InstalledInfoResponse: return solarxr_protocol.rpc.InstalledInfoResponse.pack(builder, _o.asInstalledInfoResponse());
       case RpcMessage.OpenUriRequest: return solarxr_protocol.rpc.OpenUriRequest.pack(builder, _o.asOpenUriRequest());
       case RpcMessage.OpenUriResponse: return solarxr_protocol.rpc.OpenUriResponse.pack(builder, _o.asOpenUriResponse());
+      case RpcMessage.ConnectToVideoCalibrationRequest: return solarxr_protocol.rpc.ConnectToVideoCalibrationRequest.pack(builder, _o.asConnectToVideoCalibrationRequest());
+      case RpcMessage.ConnectToVideoCalibrationResponse: return solarxr_protocol.rpc.ConnectToVideoCalibrationResponse.pack(builder, _o.asConnectToVideoCalibrationResponse());
+      case RpcMessage.StartVideoCalibrationRequest: return solarxr_protocol.rpc.StartVideoCalibrationRequest.pack(builder, _o.asStartVideoCalibrationRequest());
+      case RpcMessage.VideoCalibrationProgress: return solarxr_protocol.rpc.VideoCalibrationProgress.pack(builder, _o.asVideoCalibrationProgress());
+      case RpcMessage.VideoCalibrationError: return solarxr_protocol.rpc.VideoCalibrationError.pack(builder, _o.asVideoCalibrationError());
       default: return 0;
     }
   }

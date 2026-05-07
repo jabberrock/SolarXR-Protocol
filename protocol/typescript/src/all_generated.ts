@@ -72,6 +72,8 @@ export { ClearDriftCompensationRequest, ClearDriftCompensationRequestT } from '.
 export { ClearMountingResetRequest, ClearMountingResetRequestT } from './solarxr-protocol/rpc/clear-mounting-reset-request.js';
 export { CloseSerialRequest, CloseSerialRequestT } from './solarxr-protocol/rpc/close-serial-request.js';
 export { ComputerDirectory } from './solarxr-protocol/rpc/computer-directory.js';
+export { ConnectToVideoCalibrationRequest, ConnectToVideoCalibrationRequestT } from './solarxr-protocol/rpc/connect-to-video-calibration-request.js';
+export { ConnectToVideoCalibrationResponse, ConnectToVideoCalibrationResponseT } from './solarxr-protocol/rpc/connect-to-video-calibration-response.js';
 export { DetectStayAlignedRelaxedPoseRequest, DetectStayAlignedRelaxedPoseRequestT } from './solarxr-protocol/rpc/detect-stay-aligned-relaxed-pose-request.js';
 export { DriftCompensationSettings, DriftCompensationSettingsT } from './solarxr-protocol/rpc/drift-compensation-settings.js';
 export { EnableStayAlignedRequest, EnableStayAlignedRequestT } from './solarxr-protocol/rpc/enable-stay-aligned-request.js';
@@ -147,6 +149,7 @@ export { SkeletonConfigResponse, SkeletonConfigResponseT } from './solarxr-proto
 export { SkeletonPart, SkeletonPartT } from './solarxr-protocol/rpc/skeleton-part.js';
 export { SkeletonResetAllRequest, SkeletonResetAllRequestT } from './solarxr-protocol/rpc/skeleton-reset-all-request.js';
 export { StartUserHeightCalibration, StartUserHeightCalibrationT } from './solarxr-protocol/rpc/start-user-height-calibration.js';
+export { StartVideoCalibrationRequest, StartVideoCalibrationRequestT } from './solarxr-protocol/rpc/start-video-calibration-request.js';
 export { StartWifiProvisioningRequest, StartWifiProvisioningRequestT } from './solarxr-protocol/rpc/start-wifi-provisioning-request.js';
 export { StatusData, unionToStatusData, unionListToStatusData } from './solarxr-protocol/rpc/status-data.js';
 export { StatusMessage, StatusMessageT } from './solarxr-protocol/rpc/status-message.js';
@@ -195,6 +198,14 @@ export { VRCOSCSettings, VRCOSCSettingsT } from './solarxr-protocol/rpc/vrcoscse
 export { VRCSpineMode } from './solarxr-protocol/rpc/vrcspine-mode.js';
 export { VRCTrackerModel } from './solarxr-protocol/rpc/vrctracker-model.js';
 export { VelocitySettings, VelocitySettingsT } from './solarxr-protocol/rpc/velocity-settings.js';
+export { VideoCalibrationCamera, VideoCalibrationCameraT } from './solarxr-protocol/rpc/video-calibration-camera.js';
+export { VideoCalibrationError, VideoCalibrationErrorT } from './solarxr-protocol/rpc/video-calibration-error.js';
+export { VideoCalibrationForwardAndLeaningForwardNotAligned, VideoCalibrationForwardAndLeaningForwardNotAlignedT } from './solarxr-protocol/rpc/video-calibration-forward-and-leaning-forward-not-aligned.js';
+export { VideoCalibrationMissingTrackers, VideoCalibrationMissingTrackersT } from './solarxr-protocol/rpc/video-calibration-missing-trackers.js';
+export { VideoCalibrationProcess } from './solarxr-protocol/rpc/video-calibration-process.js';
+export { VideoCalibrationProgress, VideoCalibrationProgressT } from './solarxr-protocol/rpc/video-calibration-progress.js';
+export { VideoCalibrationStatus } from './solarxr-protocol/rpc/video-calibration-status.js';
+export { VideoCalibrationTrackerStatus, VideoCalibrationTrackerStatusT } from './solarxr-protocol/rpc/video-calibration-tracker-status.js';
 export { WifiProvisioningStatus } from './solarxr-protocol/rpc/wifi-provisioning-status.js';
 export { WifiProvisioningStatusResponse, WifiProvisioningStatusResponseT } from './solarxr-protocol/rpc/wifi-provisioning-status-response.js';
 export { LegTweaksSettings, LegTweaksSettingsT } from './solarxr-protocol/rpc/settings/leg-tweaks-settings.js';

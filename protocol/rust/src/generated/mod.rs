@@ -190,6 +190,10 @@ pub mod solarxr_protocol {
     pub use self::stay_aligned_relaxed_pose_generated::*;
     mod user_height_calibration_status_generated;
     pub use self::user_height_calibration_status_generated::*;
+    mod video_calibration_process_generated;
+    pub use self::video_calibration_process_generated::*;
+    mod video_calibration_status_generated;
+    pub use self::video_calibration_status_generated::*;
     mod keybind_generated;
     pub use self::keybind_generated::*;
     mod keybind_request_generated;
@@ -438,6 +442,24 @@ pub mod solarxr_protocol {
     pub use self::cancel_user_height_calibration_generated::*;
     mod user_height_recording_status_response_generated;
     pub use self::user_height_recording_status_response_generated::*;
+    mod connect_to_video_calibration_request_generated;
+    pub use self::connect_to_video_calibration_request_generated::*;
+    mod connect_to_video_calibration_response_generated;
+    pub use self::connect_to_video_calibration_response_generated::*;
+    mod start_video_calibration_request_generated;
+    pub use self::start_video_calibration_request_generated::*;
+    mod video_calibration_camera_generated;
+    pub use self::video_calibration_camera_generated::*;
+    mod video_calibration_tracker_status_generated;
+    pub use self::video_calibration_tracker_status_generated::*;
+    mod video_calibration_progress_generated;
+    pub use self::video_calibration_progress_generated::*;
+    mod video_calibration_missing_trackers_generated;
+    pub use self::video_calibration_missing_trackers_generated::*;
+    mod video_calibration_forward_and_leaning_forward_not_aligned_generated;
+    pub use self::video_calibration_forward_and_leaning_forward_not_aligned_generated::*;
+    mod video_calibration_error_generated;
+    pub use self::video_calibration_error_generated::*;
   } // rpc
   mod message_bundle_generated;
   pub use self::message_bundle_generated::*;

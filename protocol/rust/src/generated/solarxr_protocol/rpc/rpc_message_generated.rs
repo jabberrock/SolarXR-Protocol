@@ -12,10 +12,10 @@ use super::*;
 #[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
 pub const ENUM_MIN_RPC_MESSAGE: u8 = 0;
 #[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
-pub const ENUM_MAX_RPC_MESSAGE: u8 = 85;
+pub const ENUM_MAX_RPC_MESSAGE: u8 = 90;
 #[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
 #[allow(non_camel_case_types)]
-pub const ENUM_VALUES_RPC_MESSAGE: [RpcMessage; 86] = [
+pub const ENUM_VALUES_RPC_MESSAGE: [RpcMessage; 91] = [
   RpcMessage::NONE,
   RpcMessage::HeartbeatRequest,
   RpcMessage::HeartbeatResponse,
@@ -102,6 +102,11 @@ pub const ENUM_VALUES_RPC_MESSAGE: [RpcMessage; 86] = [
   RpcMessage::InstalledInfoResponse,
   RpcMessage::OpenUriRequest,
   RpcMessage::OpenUriResponse,
+  RpcMessage::ConnectToVideoCalibrationRequest,
+  RpcMessage::ConnectToVideoCalibrationResponse,
+  RpcMessage::StartVideoCalibrationRequest,
+  RpcMessage::VideoCalibrationProgress,
+  RpcMessage::VideoCalibrationError,
 ];
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -195,9 +200,14 @@ impl RpcMessage {
   pub const InstalledInfoResponse: Self = Self(83);
   pub const OpenUriRequest: Self = Self(84);
   pub const OpenUriResponse: Self = Self(85);
+  pub const ConnectToVideoCalibrationRequest: Self = Self(86);
+  pub const ConnectToVideoCalibrationResponse: Self = Self(87);
+  pub const StartVideoCalibrationRequest: Self = Self(88);
+  pub const VideoCalibrationProgress: Self = Self(89);
+  pub const VideoCalibrationError: Self = Self(90);
 
   pub const ENUM_MIN: u8 = 0;
-  pub const ENUM_MAX: u8 = 85;
+  pub const ENUM_MAX: u8 = 90;
   pub const ENUM_VALUES: &'static [Self] = &[
     Self::NONE,
     Self::HeartbeatRequest,
@@ -285,6 +295,11 @@ impl RpcMessage {
     Self::InstalledInfoResponse,
     Self::OpenUriRequest,
     Self::OpenUriResponse,
+    Self::ConnectToVideoCalibrationRequest,
+    Self::ConnectToVideoCalibrationResponse,
+    Self::StartVideoCalibrationRequest,
+    Self::VideoCalibrationProgress,
+    Self::VideoCalibrationError,
   ];
   /// Returns the variant's name or "" if unknown.
   pub fn variant_name(self) -> Option<&'static str> {
@@ -375,6 +390,11 @@ impl RpcMessage {
       Self::InstalledInfoResponse => Some("InstalledInfoResponse"),
       Self::OpenUriRequest => Some("OpenUriRequest"),
       Self::OpenUriResponse => Some("OpenUriResponse"),
+      Self::ConnectToVideoCalibrationRequest => Some("ConnectToVideoCalibrationRequest"),
+      Self::ConnectToVideoCalibrationResponse => Some("ConnectToVideoCalibrationResponse"),
+      Self::StartVideoCalibrationRequest => Some("StartVideoCalibrationRequest"),
+      Self::VideoCalibrationProgress => Some("VideoCalibrationProgress"),
+      Self::VideoCalibrationError => Some("VideoCalibrationError"),
       _ => None,
     }
   }
